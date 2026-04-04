@@ -25,193 +25,497 @@
       10% { opacity: 0.7; }
       100% { transform: translateY(-100vh) rotate(360deg) scale(1.1); opacity: 0; }
     }
+
+    /* LOGIN */
     #loginScreen { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: var(--cream); transition: opacity 0.6s; }
     #loginScreen.hide { opacity: 0; pointer-events: none; }
-    .login-card { width: 90%; max-width: 380px; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border-radius: 24px; padding: 2rem; text-align: center; border: 1px solid rgba(232,116,138,0.18); }
-    .login-card h1 { font-family: 'Playfair Display', serif; color: var(--rose); margin-bottom: 1rem; }
+    .login-card { width: 90%; max-width: 380px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-radius: 24px; padding: 2rem; text-align: center; border: 1px solid rgba(232,116,138,0.25); box-shadow: 0 8px 32px rgba(232,116,138,0.1); }
+    .login-card h1 { font-family: 'Playfair Display', serif; color: var(--rose); margin-bottom: 0.5rem; }
+    .login-card p { font-family: 'Caveat', cursive; color: #999; margin-bottom: 1.5rem; }
     .login-field { margin-bottom: 1rem; text-align: left; }
-    .login-field label { display: block; font-family: 'Caveat', cursive; margin-bottom: 0.3rem; }
-    .login-field input { width: 100%; border: 1.5px solid rgba(232,116,138,0.25); border-radius: 12px; padding: 0.8rem; font-family: 'Caveat', cursive; font-size: 1.1rem; outline: none; }
-    .login-btn { width: 100%; background: var(--rose); color: white; border: none; border-radius: 12px; padding: 0.9rem; font-family: 'Playfair Display', serif; cursor: pointer; }
+    .login-field label { display: block; font-family: 'Caveat', cursive; font-size: 1rem; margin-bottom: 0.3rem; color: var(--brown); }
+    .login-field input { width: 100%; border: 1.5px solid rgba(232,116,138,0.3); border-radius: 12px; padding: 0.8rem; font-family: 'Caveat', cursive; font-size: 1.1rem; outline: none; background: rgba(255,255,255,0.9); transition: border-color 0.2s; }
+    .login-field input:focus { border-color: var(--rose); }
+    .login-btn { width: 100%; background: linear-gradient(135deg, var(--rose), #d4506a); color: white; border: none; border-radius: 12px; padding: 0.9rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(232,116,138,0.35); }
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,116,138,0.45); }
+    .login-btn:active { transform: translateY(0); }
+
+    /* APP */
     #app { display: none; position: relative; z-index: 2; padding: 1.5rem; max-width: 600px; margin: 0 auto; }
     #app.visible { display: block; }
-    .top-bar { display: flex; justify-content: space-between; margin-bottom: 2rem; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .logout-btn { background: none; border: 1px solid rgba(122,82,48,0.2); border-radius: 20px; padding: 0.4rem 0.8rem; cursor: pointer; font-family: 'Caveat', cursive; font-size: 0.95rem; color: var(--brown); transition: background 0.2s; }
+    .logout-btn:hover { background: rgba(122,82,48,0.1); }
+
+    /* PIZARRA + TICKS */
+    .board-wrapper { position: relative; }
     .board-frame { background: var(--brown); border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
     .board { background: #1e1008; border-radius: 6px; padding: 2rem; min-height: 200px; text-align: center; color: #fdf0dc; position: relative; }
     .chalk-text { font-family: 'Caveat', cursive; font-size: 1.8rem; line-height: 1.4; white-space: pre-wrap; }
-    .write-panel { margin-top: 2rem; background: var(--rose-pale); padding: 1.5rem; border-radius: 16px; }
-    textarea { width: 100%; height: 100px; border-radius: 10px; padding: 1rem; font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 1rem; border: 1px solid var(--rose-light); }
-    .history-item { background: white; margin-top: 0.5rem; padding: 1rem; border-radius: 10px; display: flex; justify-content: space-between; font-family: 'Caveat', cursive; }
-    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--rose); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; transition: 0.4s; z-index: 1000; }
+
+    /* TICKS WHATSAPP STYLE */
+    .ticks-panel {
+      position: absolute;
+      right: -48px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .tick-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+    }
+    .tick-label {
+      font-family: 'Caveat', cursive;
+      font-size: 0.65rem;
+      text-align: center;
+      max-width: 42px;
+      line-height: 1.1;
+      color: #666;
+    }
+
+    /* CUENTA REGRESIVA */
+    .countdown-box {
+      margin-top: 1.5rem;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(232,116,138,0.2);
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+    .countdown-label { font-family: 'Caveat', cursive; font-size: 0.95rem; color: #888; margin-bottom: 0.3rem; }
+    .countdown-time { font-family: 'Caveat', cursive; font-size: 2rem; color: var(--rose); font-weight: 700; letter-spacing: 2px; }
+    .countdown-done { font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--green-light); }
+
+    /* WRITE PANEL */
+    .write-panel { margin-top: 2rem; background: var(--rose-pale); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(232,116,138,0.15); }
+    .write-panel h3 { font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 1rem; color: var(--brown); }
+    textarea { width: 100%; height: 100px; border-radius: 10px; padding: 1rem; font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 1rem; border: 1px solid var(--rose-light); outline: none; resize: vertical; background: white; }
+    textarea:focus { border-color: var(--rose); }
+    #sendBtn { width: 100%; background: linear-gradient(135deg, var(--rose), #d4506a); color: white; border: none; border-radius: 12px; padding: 0.9rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(232,116,138,0.3); }
+    #sendBtn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+
+    /* HISTORY */
+    .history-section { margin-top: 3rem; }
+    .history-section h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; text-align: center; color: var(--brown); margin-bottom: 1rem; }
+    .history-item { background: white; margin-top: 0.5rem; padding: 1rem; border-radius: 10px; display: flex; justify-content: space-between; align-items: flex-start; font-family: 'Caveat', cursive; box-shadow: 0 2px 8px rgba(0,0,0,0.05); gap: 1rem; }
+    .history-item span { flex: 1; font-size: 1.05rem; }
+    .history-item small { opacity: 0.45; white-space: nowrap; font-size: 0.85rem; }
+
+    /* TOAST */
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--rose); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; transition: 0.4s; z-index: 1000; font-family: 'Caveat', cursive; font-size: 1rem; }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; border-radius: 6px; }
+
+    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; border-radius: 6px; font-size: 2rem; }
+
+    .readonly-banner { text-align: center; margin-top: 2rem; font-family: 'Caveat', cursive; font-size: 1.1rem; opacity: 0.7; }
+
+    /* Responsive ticks */
+    @media (max-width: 520px) {
+      .ticks-panel { right: -36px; }
+      .tick-icon { font-size: 1.2rem; }
+    }
   </style>
 </head>
 <body>
 
-  <div id="toast"></div>
+<div id="toast"></div>
 
-  <div id="loginScreen">
-    <div class="login-card">
-      <h1>Hola 🌻</h1>
-      <div class="login-field">
-        <label>Nombre</label>
-        <input type="text" id="loginNombre" placeholder="Tu nombre">
-      </div>
-      <div class="login-field">
-        <label>Apellido</label>
-        <input type="text" id="loginApellido" placeholder="Tu apellido">
-      </div>
-      <button class="login-btn" onclick="doLogin()">Entrar 🌸</button>
-      <p id="loginError" style="color:red; font-size:0.8rem; margin-top:10px;"></p>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Hola 🌻</h1>
+    <p>Un lugar solo para nosotros</p>
+    <div class="login-field">
+      <label>Nombre</label>
+      <input type="text" id="loginNombre" placeholder="Tu nombre" autocomplete="given-name"/>
     </div>
+    <div class="login-field">
+      <label>Apellido</label>
+      <input type="text" id="loginApellido" placeholder="Tu apellido" autocomplete="family-name"/>
+    </div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="loginPassword" placeholder="Tu contraseña"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Entrar 🌸</button>
+    <p id="loginError" style="color:#e8748a; font-size:0.85rem; margin-top:10px; font-family:'Caveat'"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="top-bar">
+    <div id="userBadge" style="font-family:'Caveat'; font-size:1.2rem; color:var(--brown);"></div>
+    <button class="logout-btn" onclick="doLogout()">Salir 🚪</button>
   </div>
 
-  <div id="app">
-    <div class="top-bar">
-      <div id="userBadge" style="font-family:'Caveat'; font-size:1.2rem;"></div>
-      <button onclick="doLogout()" style="background:none; border:none; cursor:pointer;">Salir 🚪</button>
-    </div>
+  <header style="text-align:center; margin-bottom:2rem;">
+    <h1 style="font-family:'Playfair Display'; color:var(--rose); font-size:1.8rem;">Para Ti, Mi Amor</h1>
+  </header>
 
-    <header style="text-align:center; margin-bottom:2rem;">
-      <h1 style="font-family:'Playfair Display'; color:var(--rose);">Para Ti, Mi Amor</h1>
-    </header>
-
+  <!-- PIZARRA -->
+  <div class="board-wrapper" style="padding-right: 52px;">
     <div class="board-frame">
       <div class="board">
         <div id="loader" class="loading-overlay">⏳</div>
         <div id="chalkText" class="chalk-text">Cargando mensaje...</div>
-        <div id="boardDate" style="margin-top:1rem; opacity:0.5; font-size:0.8rem;"></div>
+        <div id="boardDate" style="margin-top:1rem; opacity:0.5; font-size:0.8rem; font-family:'Caveat';"></div>
       </div>
     </div>
-
-    <div id="writePanel" class="write-panel" style="display:none;">
-      <textarea id="msgInput" placeholder="Escribe algo lindo para hoy..."></textarea>
-      <button class="login-btn" id="sendBtn" onclick="sendMessage()">Poner en la pizarra 💌</button>
-    </div>
-
-    <div id="readonlyBanner" style="display:none; text-align:center; margin-top:2rem; font-family:'Caveat'; opacity:0.7;">
-      🌻 Cada día aparecerá un mensaje nuevo aquí 💛
-    </div>
-
-    <div style="margin-top:3rem;">
-      <h2 style="font-family:'Playfair Display'; font-size:1.2rem; text-align:center;">Mensajes pasados</h2>
-      <div id="historyList"></div>
+    <!-- Ticks solo para writer -->
+    <div class="ticks-panel" id="ticksPanel" style="display:none;">
+      <div class="tick-icon" id="tick1">✓</div>
+      <div class="tick-icon" id="tick2">✓</div>
+      <div class="tick-label" id="tickLabel">Enviado</div>
     </div>
   </div>
 
-  <script>
-    // === TUS CREDENCIALES REALES ===
-    const BIN_ID  = '69c762eeaa77b81da92a5074';
-    const API_KEY = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
-    const URL     = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+  <!-- CUENTA REGRESIVA -->
+  <div class="countdown-box" id="countdownBox" style="display:none;">
+    <div class="countdown-label">⏰ Próximo mensaje en</div>
+    <div class="countdown-time" id="countdownTime">--:--:--</div>
+  </div>
+  <div class="countdown-box" id="countdownReady" style="display:none;">
+    <div class="countdown-done">✨ ¡Ya puedes escribir un nuevo mensaje! ✨</div>
+  </div>
 
-    const USERS = {
-      'constanza soto':   { role: 'viewer', display: 'Constanza', emoji: '🌸' },
-      'ignacio calderon': { role: 'writer', display: 'Ignacio',   emoji: '✍️' },
-    };
+  <!-- PANEL ESCRITOR -->
+  <div id="writePanel" class="write-panel" style="display:none;">
+    <h3>✍️ Escribe tu mensaje de hoy</h3>
+    <textarea id="msgInput" placeholder="Escribe algo lindo para hoy..."></textarea>
+    <button class="login-btn" id="sendBtn" onclick="sendMessage()">Poner en la pizarra 💌</button>
+  </div>
 
-    const SESSION_KEY = 'amor_session_v2';
+  <!-- BANNER LECTORA -->
+  <div id="readonlyBanner" class="readonly-banner" style="display:none;">
+    🌻 Cada día aparecerá un mensaje nuevo aquí 💛
+  </div>
 
-    function normalize(str) {
-      return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  <!-- HISTORIAL -->
+  <div class="history-section">
+    <h2>Mensajes pasados</h2>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script>
+  // =============================================
+  // CONFIGURACIÓN
+  // =============================================
+  const BIN_ID  = '69c762eeaa77b81da92a5074';
+  const API_KEY = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
+  const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+  // Credenciales: nombre_apellido → { password, role, display, emoji }
+  const USERS = {
+    'ignacio calderon': { password: 'Corte123@',   role: 'writer', display: 'Ignacio',   emoji: '✍️'  },
+    'constanza soto':  { password: 'potoloco123',  role: 'viewer', display: 'Constanza', emoji: '🌸'  },
+  };
+
+  const SESSION_KEY = 'amor_session_v3';
+  const PHONE_CONSTANZA = '+56940644460'; // Número para SMS
+
+  // =============================================
+  // AUTH
+  // =============================================
+  function normalize(str) {
+    return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  function doLogin() {
+    const n  = normalize(document.getElementById('loginNombre').value);
+    const a  = normalize(document.getElementById('loginApellido').value);
+    const pw = document.getElementById('loginPassword').value.trim();
+    const key = n + ' ' + a;
+    const user = USERS[key];
+
+    if (!user) {
+      document.getElementById('loginError').textContent = 'No estás en la lista de invitados 💔';
+      return;
+    }
+    if (user.password !== pw) {
+      document.getElementById('loginError').textContent = 'Contraseña incorrecta 🔐';
+      return;
+    }
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ key, role: user.role, display: user.display, emoji: user.emoji }));
+    location.reload();
+  }
+
+  function doLogout() { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
+
+  // Enter en campos de login
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+  });
+
+  // =============================================
+  // JSONBIN API
+  // =============================================
+  async function getRecord() {
+    try {
+      const res  = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+      const data = await res.json();
+      return data.record || { mensajes: [] };
+    } catch(e) { return { mensajes: [] }; }
+  }
+
+  async function saveRecord(record) {
+    await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+      body: JSON.stringify(record)
+    });
+  }
+
+  // =============================================
+  // FECHA
+  // =============================================
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function nextMidnight() {
+    const d = new Date();
+    d.setHours(24, 0, 0, 0);
+    return d;
+  }
+
+  // =============================================
+  // CUENTA REGRESIVA
+  // =============================================
+  function startCountdown(hasTodayMsg) {
+    const boxCountdown = document.getElementById('countdownBox');
+    const boxReady     = document.getElementById('countdownReady');
+    const timeEl       = document.getElementById('countdownTime');
+
+    function update() {
+      const now  = Date.now();
+      const diff = nextMidnight() - now;
+      if (diff <= 0) {
+        location.reload(); return;
+      }
+      const h = String(Math.floor(diff / 3600000)).padStart(2,'0');
+      const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+      const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+      timeEl.textContent = `${h}:${m}:${s}`;
     }
 
-    function doLogin() {
-      const n = normalize(document.getElementById('loginNombre').value);
-      const a = normalize(document.getElementById('loginApellido').value);
-      const user = USERS[n + ' ' + a];
-      if (user) {
-        sessionStorage.setItem(SESSION_KEY, JSON.stringify({key: n+' '+a, ...user}));
-        location.reload();
+    if (hasTodayMsg) {
+      boxCountdown.style.display = 'block';
+      boxReady.style.display = 'none';
+      update();
+      setInterval(update, 1000);
+    } else {
+      boxCountdown.style.display = 'none';
+      boxReady.style.display = 'block';
+    }
+  }
+
+  // =============================================
+  // TICKS WHATSAPP
+  // =============================================
+  // Estado del mensaje: sent | delivered | read
+  // sent      = enviado, Constanza no ha abierto aún       → ✓ gris
+  // delivered = Constanza abrió la app pero no marcó read  → ✓✓ gris
+  // read      = Constanza leyó (abrió la app como viewer)  → ✓✓ verde
+
+  function renderTicks(status) {
+    const panel = document.getElementById('ticksPanel');
+    const t1    = document.getElementById('tick1');
+    const t2    = document.getElementById('tick2');
+    const lbl   = document.getElementById('tickLabel');
+
+    panel.style.display = 'flex';
+
+    if (status === 'read') {
+      t1.textContent = '✓'; t1.style.color = '#34c759';
+      t2.textContent = '✓'; t2.style.color = '#34c759';
+      t2.style.display = 'block';
+      lbl.textContent = 'Visto 💚';
+      lbl.style.color = '#34c759';
+    } else if (status === 'delivered') {
+      t1.textContent = '✓'; t1.style.color = '#aaa';
+      t2.textContent = '✓'; t2.style.color = '#aaa';
+      t2.style.display = 'block';
+      lbl.textContent = 'Entregado';
+      lbl.style.color = '#aaa';
+    } else {
+      // sent: solo un tick
+      t1.textContent = '✓'; t1.style.color = '#aaa';
+      t2.style.display = 'none';
+      lbl.textContent = 'Enviado';
+      lbl.style.color = '#aaa';
+    }
+  }
+
+  // =============================================
+  // RENDER PRINCIPAL
+  // =============================================
+  async function render(session) {
+    const record   = await getRecord();
+    const msgs     = record.mensajes || [];
+    const today    = todayStr();
+    const todayMsg = msgs.find(m => m.date === today);
+
+    // --- Pizarra ---
+    document.getElementById('chalkText').textContent =
+      todayMsg ? todayMsg.text : 'Aún no hay mensaje hoy... 🌻';
+    document.getElementById('boardDate').textContent =
+      todayMsg ? `📅 ${today}` : '';
+
+    // --- Lógica por rol ---
+    if (session.role === 'writer') {
+      // Panel de escritura
+      document.getElementById('writePanel').style.display = 'block';
+      const btn = document.getElementById('sendBtn');
+      btn.disabled = !!todayMsg;
+      btn.textContent = todayMsg ? 'Ya enviado hoy ✅' : 'Poner en la pizarra 💌';
+
+      // Ticks
+      if (todayMsg) {
+        const status = todayMsg.readStatus || 'sent';
+        renderTicks(status);
       } else {
-        document.getElementById('loginError').textContent = 'No estás en la lista de invitados 💔';
+        document.getElementById('ticksPanel').style.display = 'none';
+      }
+
+    } else {
+      // Vista de Constanza: marcar como "delivered" si aún no fue marcado
+      document.getElementById('readonlyBanner').style.display = 'block';
+
+      if (todayMsg && todayMsg.readStatus !== 'read') {
+        // Marcar como leído
+        todayMsg.readStatus = 'read';
+        record.mensajes = msgs;
+        saveRecord(record); // fire & forget
       }
     }
 
-    function doLogout() { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
+    // --- Cuenta regresiva (ambos) ---
+    startCountdown(!!todayMsg);
 
-    async function getMessages() {
-      try {
-        const res = await fetch(URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-        const data = await res.json();
-        return data.record.mensajes || [];
-      } catch(e) { return []; }
+    // --- Historial ---
+    const history = msgs.filter(m => m.date !== today).reverse();
+    document.getElementById('historyList').innerHTML = history.length
+      ? history.map(m => `
+          <div class="history-item">
+            <span>${escHtml(m.text)}</span>
+            <small>${m.date}</small>
+          </div>`).join('')
+      : `<p style="text-align:center; font-family:'Caveat'; opacity:0.5; margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // =============================================
+  // ENVIAR MENSAJE
+  // =============================================
+  async function sendMessage() {
+    const txt = document.getElementById('msgInput').value.trim();
+    if (!txt) { showToast('Escribe algo primero 💭'); return; }
+
+    document.getElementById('loader').style.display = 'flex';
+    document.getElementById('sendBtn').disabled = true;
+
+    const record = await getRecord();
+    const msgs   = record.mensajes || [];
+
+    // Evitar duplicado
+    if (msgs.find(m => m.date === todayStr())) {
+      showToast('Ya enviaste el mensaje de hoy ✅');
+      location.reload(); return;
     }
 
-    async function saveMessages(msgs) {
-      await fetch(URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-        body: JSON.stringify({ mensajes: msgs })
+    msgs.push({ date: todayStr(), text: txt, readStatus: 'sent' });
+    record.mensajes = msgs;
+    await saveRecord(record);
+
+    // === SMS via Twilio (necesita proxy/backend) ===
+    // Como HTML puro no puede llamar a Twilio directamente (CORS),
+    // aquí se usa un servicio de formulario gratuito como workaround.
+    // Ver instrucciones abajo para configurar.
+    await sendSMSNotification(txt);
+
+    showToast('¡Mensaje enviado con amor! 💌');
+    setTimeout(() => location.reload(), 1500);
+  }
+
+  // =============================================
+  // SMS - Via Twilio Functions (serverless)
+  // =============================================
+  async function sendSMSNotification(msgText) {
+    // Llamar a Twilio Function que maneja el envío de SMS
+    // Reemplaza TWILIO_FUNCTION_URL con tu endpoint real
+    const TWILIO_FUNCTION_URL = 'https://YOUR_ACCOUNT.twilio.com/YOUR_SERVICE/send-sms';
+
+    try {
+      const response = await fetch(TWILIO_FUNCTION_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: PHONE_CONSTANZA,
+          message: `${msgText}\n\n💌 De Ignacio`,
+          from: 'Ignacio'
+        })
       });
-    }
 
-    function todayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    }
-
-    async function render() {
-      const session = JSON.parse(sessionStorage.getItem(SESSION_KEY));
-      const msgs = await getMessages();
-      const today = todayStr();
-      const todayMsg = msgs.find(m => m.date === today);
-
-      document.getElementById('chalkText').textContent = todayMsg ? todayMsg.text : "Aún no hay mensaje hoy... 🌻";
-      document.getElementById('boardDate').textContent = todayMsg ? today : "";
-
-      if (session.role === 'writer') {
-        document.getElementById('writePanel').style.display = 'block';
-        document.getElementById('sendBtn').disabled = !!todayMsg;
-        if(todayMsg) document.getElementById('sendBtn').textContent = "Ya enviado ✅";
-      } else {
-        document.getElementById('readonlyBanner').style.display = 'block';
+      if (!response.ok) {
+        throw new Error(`SMS error: ${response.status}`);
       }
 
-      const history = msgs.filter(m => m.date !== today).reverse();
-      document.getElementById('historyList').innerHTML = history.map(m => `
-        <div class="history-item">
-          <span>${m.text}</span>
-          <small style="opacity:0.5">${m.date}</small>
-        </div>
-      `).join('');
+      const result = await response.json();
+      console.log('SMS enviado:', result.sid);
+    } catch(e) {
+      // SMS falla silenciosamente — el mensaje igual se guarda
+      console.warn('SMS no enviado:', e);
     }
+  }
 
-    async function sendMessage() {
-      const txt = document.getElementById('msgInput').value.trim();
-      if (!txt) return;
-      document.getElementById('loader').style.display = 'flex';
-      const msgs = await getMessages();
-      msgs.push({ date: todayStr(), text: txt });
-      await saveMessages(msgs);
-      location.reload();
+  // =============================================
+  // TOAST
+  // =============================================
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // =============================================
+  // INIT
+  // =============================================
+  (function() {
+    const s = sessionStorage.getItem(SESSION_KEY);
+    if (s) {
+      const user = JSON.parse(s);
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      document.getElementById('userBadge').textContent = user.emoji + ' ' + user.display;
+      render(user);
     }
+  })();
 
-    // Inicialización
-    (function() {
-      const s = sessionStorage.getItem(SESSION_KEY);
-      if (s) {
-        const user = JSON.parse(s);
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('app').classList.add('visible');
-        document.getElementById('userBadge').textContent = user.emoji + ' ' + user.display;
-        render();
-      }
-    })();
-
-    // Decoración: Flores flotantes
-    function spawn() {
-      const el = document.createElement('div');
-      el.className = 'floatie';
-      el.textContent = ['🌻','💛','🌸'][Math.floor(Math.random()*3)];
-      el.style.left = Math.random()*90+'vw';
-      el.style.bottom = '-20px';
-      el.style.animationDuration = (5+Math.random()*5)+'s';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 10000);
-    }
-    setInterval(spawn, 3000);
-  </script>
+  // Flores flotantes
+  function spawn() {
+    const el = document.createElement('div');
+    el.className = 'floatie';
+    el.textContent = ['🌻','💛','🌸','✨'][Math.floor(Math.random()*4)];
+    el.style.left = Math.random()*90+'vw';
+    el.style.bottom = '-20px';
+    el.style.animationDuration = (5+Math.random()*5)+'s';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 10000);
+  }
+  setInterval(spawn, 3000);
+</script>
 </body>
 </html>
