@@ -200,7 +200,14 @@
 
   function todayStr() {
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  }
+
+  function nextMinute() {
+    const d = new Date();
+    d.setSeconds(0, 0);
+    d.setMinutes(d.getMinutes() + 1);
+    return d;
   }
 
   function startCountdown(hasTodayMsg) {
@@ -210,13 +217,12 @@
     if (hasTodayMsg) {
       boxCD.style.display = 'block'; boxReady.style.display = 'none';
       const tick = () => {
-        const midnight = new Date(); midnight.setHours(24,0,0,0);
-        const diff = midnight - Date.now();
+        const next = nextMinute();
+        const diff = next - Date.now();
         if (diff <= 0) { location.reload(); return; }
-        const h = String(Math.floor(diff/3600000)).padStart(2,'0');
-        const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+        const m = String(Math.floor(diff/60000)).padStart(2,'0');
         const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-        timeEl.textContent = `${h}:${m}:${s}`;
+        timeEl.textContent = `${m}:${s}`;
       };
       tick(); setInterval(tick, 1000);
     } else {
@@ -248,14 +254,14 @@
     const today    = todayStr();
     const todayMsg = msgs.find(m => m.date === today);
 
-    document.getElementById('chalkText').textContent = todayMsg ? todayMsg.text : 'Aún no hay mensaje hoy... 🌻';
-    document.getElementById('boardDate').textContent = todayMsg ? `📅 ${today}` : '';
+    document.getElementById('chalkText').textContent = todayMsg ? todayMsg.text : 'Aún no hay mensaje en este minuto... 🌻';
+    document.getElementById('boardDate').textContent = todayMsg ? `⏰ ${todayStr()}` : '';
 
     if (session.role === 'writer') {
       document.getElementById('writePanel').style.display = 'block';
       const btn = document.getElementById('sendBtn');
       btn.disabled = !!todayMsg;
-      btn.textContent = todayMsg ? 'Ya enviado hoy ✅' : 'Poner en la pizarra 💌';
+      btn.textContent = todayMsg ? 'Ya enviado este minuto ✅' : 'Poner en la pizarra 💌';
       if (todayMsg) renderTicks(todayMsg.readStatus || 'sent');
       else document.getElementById('ticksPanel').style.display = 'none';
     } else {
@@ -288,7 +294,7 @@
 
     const record = await getRecord();
     const msgs   = record.mensajes || [];
-    if (msgs.find(m => m.date === todayStr())) { showToast('Ya enviaste hoy ✅'); location.reload(); return; }
+    if (msgs.find(m => m.date === todayStr())) { showToast('Ya enviaste en este minuto ✅'); location.reload(); return; }
 
     msgs.push({ date: todayStr(), text: txt, readStatus: 'sent' });
     record.mensajes = msgs;
