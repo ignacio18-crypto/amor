@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <title>Para Ti 🌻</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;600;700&family=Lora:ital@0;1&display=swap" rel="stylesheet"/>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
   <style>
     :root {
       --cream: #fdf6e3; --warm: #f5e6c8; --gold: #e8a020;
@@ -148,7 +149,11 @@
   const BIN_ID   = '69c762eeaa77b81da92a5074';
   const API_KEY  = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL  = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  const MAKE_URL = 'https://hook.eu1.make.com/jyqlivej08x6gvciqet7f2ityo97l82w';
+  
+  // EmailJS (reemplaza con TUS credenciales)
+  const EMAILJS_SERVICE = 'YOUR_SERVICE_ID';     // Ej: service_abc123xyz
+  const EMAILJS_TEMPLATE = 'YOUR_TEMPLATE_ID';   // Ej: template_abc123xyz
+  const EMAILJS_KEY = 'YOUR_PUBLIC_KEY';         // Ej: abc123xyz456
 
   const USERS = {
     'ignacio calderon': { password: 'Corte123@',  role: 'writer', display: 'Ignacio',   emoji: '✍️' },
@@ -289,14 +294,10 @@
     record.mensajes = msgs;
     await saveRecord(record);
 
-    // SMS via Make.com → Twilio
+    // Email notification via EmailJS
     try {
-      await fetch(MAKE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to: '+56940644460', message: 'tienes un mensaje de amor 💌' })
-      });
-    } catch(e) { console.warn('SMS no enviado:', e); }
+      await sendEmailNotification(txt);
+    } catch(e) { console.warn('Email no enviado:', e); }
 
     showToast('¡Mensaje enviado con amor! 💌');
     setTimeout(() => location.reload(), 1500);
@@ -307,6 +308,26 @@
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Email via EmailJS
+  async function sendEmailNotification(msgText) {
+    if (!EMAILJS_SERVICE || EMAILJS_SERVICE.includes('YOUR_')) {
+      console.warn('EmailJS no configurado. Configura tus credenciales en el código.');
+      return;
+    }
+    
+    try {
+      emailjs.init(EMAILJS_KEY);
+      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+        to_email: 'constanza.soto@email.com', // Reemplaza con email de Constanza
+        message: msgText,
+        from_name: 'Ignacio'
+      });
+      console.log('Email enviado exitosamente');
+    } catch(e) {
+      console.warn('Error enviando email:', e);
+    }
   }
 
   (function() {
