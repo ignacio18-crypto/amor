@@ -274,40 +274,40 @@
   }
 
   // =============================================
-  // FECHA
+  // FECHA/HORA - AHORA EN MINUTOS
   // =============================================
-  function todayStr() {
+  function currentMinuteStr() {
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   }
 
-  function nextMidnight() {
+  function nextMinute() {
     const d = new Date();
-    d.setHours(24, 0, 0, 0);
+    d.setSeconds(0, 0);
+    d.setMinutes(d.getMinutes() + 1);
     return d;
   }
 
   // =============================================
-  // CUENTA REGRESIVA
+  // CUENTA REGRESIVA - 1 MINUTO
   // =============================================
-  function startCountdown(hasTodayMsg) {
+  function startCountdown(hasCurrentMsg) {
     const boxCountdown = document.getElementById('countdownBox');
     const boxReady     = document.getElementById('countdownReady');
     const timeEl       = document.getElementById('countdownTime');
 
     function update() {
       const now  = Date.now();
-      const diff = nextMidnight() - now;
+      const diff = nextMinute() - now;
       if (diff <= 0) {
         location.reload(); return;
       }
-      const h = String(Math.floor(diff / 3600000)).padStart(2,'0');
-      const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+      const m = String(Math.floor(diff / 60000)).padStart(2,'0');
       const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
-      timeEl.textContent = `${h}:${m}:${s}`;
+      timeEl.textContent = `${m}:${s}`;
     }
 
-    if (hasTodayMsg) {
+    if (hasCurrentMsg) {
       boxCountdown.style.display = 'block';
       boxReady.style.display = 'none';
       update();
@@ -361,26 +361,26 @@
   async function render(session) {
     const record   = await getRecord();
     const msgs     = record.mensajes || [];
-    const today    = todayStr();
-    const todayMsg = msgs.find(m => m.date === today);
+    const current  = currentMinuteStr();
+    const currentMsg = msgs.find(m => m.date === current);
 
     // --- Pizarra ---
     document.getElementById('chalkText').textContent =
-      todayMsg ? todayMsg.text : 'Aún no hay mensaje hoy... 🌻';
+      currentMsg ? currentMsg.text : 'Aún no hay mensaje en este minuto... 🌻';
     document.getElementById('boardDate').textContent =
-      todayMsg ? `📅 ${today}` : '';
+      currentMsg ? `⏰ ${current}` : '';
 
     // --- Lógica por rol ---
     if (session.role === 'writer') {
       // Panel de escritura
       document.getElementById('writePanel').style.display = 'block';
       const btn = document.getElementById('sendBtn');
-      btn.disabled = !!todayMsg;
-      btn.textContent = todayMsg ? 'Ya enviado hoy ✅' : 'Poner en la pizarra 💌';
+      btn.disabled = !!currentMsg;
+      btn.textContent = currentMsg ? 'Ya enviado este minuto ✅' : 'Poner en la pizarra 💌';
 
       // Ticks
-      if (todayMsg) {
-        const status = todayMsg.readStatus || 'sent';
+      if (currentMsg) {
+        const status = currentMsg.readStatus || 'sent';
         renderTicks(status);
       } else {
         document.getElementById('ticksPanel').style.display = 'none';
@@ -390,19 +390,19 @@
       // Vista de Constanza: marcar como "delivered" si aún no fue marcado
       document.getElementById('readonlyBanner').style.display = 'block';
 
-      if (todayMsg && todayMsg.readStatus !== 'read') {
+      if (currentMsg && currentMsg.readStatus !== 'read') {
         // Marcar como leído
-        todayMsg.readStatus = 'read';
+        currentMsg.readStatus = 'read';
         record.mensajes = msgs;
         saveRecord(record); // fire & forget
       }
     }
 
     // --- Cuenta regresiva (ambos) ---
-    startCountdown(!!todayMsg);
+    startCountdown(!!currentMsg);
 
     // --- Historial ---
-    const history = msgs.filter(m => m.date !== today).reverse();
+    const history = msgs.filter(m => m.date !== current).reverse();
     document.getElementById('historyList').innerHTML = history.length
       ? history.map(m => `
           <div class="history-item">
@@ -428,14 +428,15 @@
 
     const record = await getRecord();
     const msgs   = record.mensajes || [];
+    const current = currentMinuteStr();
 
     // Evitar duplicado
-    if (msgs.find(m => m.date === todayStr())) {
-      showToast('Ya enviaste el mensaje de hoy ✅');
+    if (msgs.find(m => m.date === current)) {
+      showToast('Ya enviaste el mensaje en este minuto ✅');
       location.reload(); return;
     }
 
-    msgs.push({ date: todayStr(), text: txt, readStatus: 'sent' });
+    msgs.push({ date: current, text: txt, readStatus: 'sent' });
     record.mensajes = msgs;
     await saveRecord(record);
 
