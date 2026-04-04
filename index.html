@@ -123,20 +123,20 @@
 
   <div class="countdown-box" id="countdownBox" style="display:none;">
     <div class="countdown-label">⏰ Próximo mensaje en</div>
-    <div class="countdown-time" id="countdownTime">--:--:--</div>
+    <div class="countdown-time" id="countdownTime">--:--</div>
   </div>
   <div class="countdown-box" id="countdownReady" style="display:none;">
     <div class="countdown-done">✨ ¡Ya puedes escribir un nuevo mensaje! ✨</div>
   </div>
 
   <div id="writePanel" class="write-panel" style="display:none;">
-    <h3>✍️ Escribe tu mensaje de hoy</h3>
-    <textarea id="msgInput" placeholder="Escribe algo lindo para hoy..."></textarea>
+    <h3>✍️ Escribe tu mensaje</h3>
+    <textarea id="msgInput" placeholder="Escribe algo lindo..."></textarea>
     <button class="login-btn" id="sendBtn" onclick="sendMessage()">Poner en la pizarra 💌</button>
   </div>
 
   <div id="readonlyBanner" class="readonly-banner" style="display:none;">
-    🌻 Cada día aparecerá un mensaje nuevo aquí 💛
+    🌻 Cada 2 minutos puede aparecer un mensaje nuevo aquí 💛
   </div>
 
   <div class="history-section">
@@ -146,14 +146,21 @@
 </div>
 
 <script>
+  // ============================================
+  // CONFIGURACIÓN
+  // ============================================
   const BIN_ID   = '69c762eeaa77b81da92a5074';
   const API_KEY  = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL  = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  
-  // EmailJS (reemplaza con TUS credenciales)
-  const EMAILJS_SERVICE = 'service_y50id6k';     // Service ID
-  const EMAILJS_TEMPLATE = 'template_6lp3xj3';   // Template ID
-  const EMAILJS_KEY = 'W8t7bdDfFqpekh1pg';       // Public Key
+
+  const EMAILJS_SERVICE  = 'service_y50id6k';
+  const EMAILJS_TEMPLATE = 'template_6lp3xj3';
+  const EMAILJS_KEY      = 'W8t7bdDfFqpekh1pg';
+  const EMAIL_CONSTANZA  = 'constanza.sotoo21@gmail.com';
+
+  // ⏱️ Minutos de espera entre mensajes
+  const MINUTOS_ESPERA = 2;
+  const MS_ESPERA = MINUTOS_ESPERA * 60 * 1000;
 
   const USERS = {
     'ignacio calderon': { password: 'Corte123@',  role: 'writer', display: 'Ignacio',   emoji: '✍️' },
@@ -162,6 +169,9 @@
 
   const SESSION_KEY = 'amor_session_v3';
 
+  // ============================================
+  // AUTH
+  // ============================================
   function normalize(str) {
     return str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   }
@@ -179,9 +189,11 @@
   }
 
   function doLogout() { sessionStorage.removeItem(SESSION_KEY); location.reload(); }
-
   document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
+  // ============================================
+  // JSONBIN
+  // ============================================
   async function getRecord() {
     try {
       const res  = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
@@ -198,38 +210,57 @@
     });
   }
 
-  function todayStr() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  // ============================================
+  // TIEMPO - clave basada en bloque de 2 minutos
+  // ============================================
+  function getBlockKey() {
+    // Divide el tiempo en bloques de MINUTOS_ESPERA minutos
+    // Ej: si son las 14:03, el bloque es "14:02" (cada 2 min)
+    const now = Date.now();
+    const block = Math.floor(now / MS_ESPERA);
+    return String(block);
   }
 
-  function nextMinute() {
-    const d = new Date();
-    d.setSeconds(0, 0);
-    d.setMinutes(d.getMinutes() + 1);
-    return d;
+  function msHastaProximoBloque() {
+    const now = Date.now();
+    const block = Math.floor(now / MS_ESPERA);
+    const nextBlock = (block + 1) * MS_ESPERA;
+    return nextBlock - now;
   }
 
-  function startCountdown(hasTodayMsg) {
+  function formatTime(ms) {
+    const m = String(Math.floor(ms / 60000)).padStart(2, '0');
+    const s = String(Math.floor((ms % 60000) / 1000)).padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  // ============================================
+  // CUENTA REGRESIVA
+  // ============================================
+  function startCountdown(hasCurrentMsg) {
     const boxCD    = document.getElementById('countdownBox');
     const boxReady = document.getElementById('countdownReady');
     const timeEl   = document.getElementById('countdownTime');
-    if (hasTodayMsg) {
-      boxCD.style.display = 'block'; boxReady.style.display = 'none';
+
+    if (hasCurrentMsg) {
+      boxCD.style.display = 'block';
+      boxReady.style.display = 'none';
       const tick = () => {
-        const next = nextMinute();
-        const diff = next - Date.now();
+        const diff = msHastaProximoBloque();
         if (diff <= 0) { location.reload(); return; }
-        const m = String(Math.floor(diff/60000)).padStart(2,'0');
-        const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
-        timeEl.textContent = `${m}:${s}`;
+        timeEl.textContent = formatTime(diff);
       };
-      tick(); setInterval(tick, 1000);
+      tick();
+      setInterval(tick, 1000);
     } else {
-      boxCD.style.display = 'none'; boxReady.style.display = 'block';
+      boxCD.style.display = 'none';
+      boxReady.style.display = 'block';
     }
   }
 
+  // ============================================
+  // TICKS WHATSAPP (solo Ignacio)
+  // ============================================
   function renderTicks(status) {
     const panel = document.getElementById('ticksPanel');
     const t1 = document.getElementById('tick1');
@@ -248,37 +279,50 @@
     }
   }
 
+  // ============================================
+  // RENDER
+  // ============================================
   async function render(session) {
-    const record   = await getRecord();
-    const msgs     = record.mensajes || [];
-    const today    = todayStr();
-    const todayMsg = msgs.find(m => m.date === today);
+    const record     = await getRecord();
+    const msgs       = record.mensajes || [];
+    const currentKey = getBlockKey();
 
-    document.getElementById('chalkText').textContent = todayMsg ? todayMsg.text : 'Aún no hay mensaje en este minuto... 🌻';
-    document.getElementById('boardDate').textContent = todayMsg ? `⏰ ${todayStr()}` : '';
+    // El mensaje actual es el del bloque de tiempo vigente
+    const currentMsg = msgs.find(m => m.blockKey === currentKey);
+
+    document.getElementById('chalkText').textContent =
+      currentMsg ? currentMsg.text : 'Aún no hay mensaje... 🌻';
+    document.getElementById('boardDate').textContent =
+      currentMsg ? `⏰ ${currentMsg.sentAt}` : '';
 
     if (session.role === 'writer') {
       document.getElementById('writePanel').style.display = 'block';
       const btn = document.getElementById('sendBtn');
-      btn.disabled = !!todayMsg;
-      btn.textContent = todayMsg ? 'Ya enviado este minuto ✅' : 'Poner en la pizarra 💌';
-      if (todayMsg) renderTicks(todayMsg.readStatus || 'sent');
+      btn.disabled = !!currentMsg;
+      btn.textContent = currentMsg ? 'Ya enviado ✅' : 'Poner en la pizarra 💌';
+      if (currentMsg) renderTicks(currentMsg.readStatus || 'sent');
       else document.getElementById('ticksPanel').style.display = 'none';
     } else {
       document.getElementById('ticksPanel').style.display = 'none';
       document.getElementById('readonlyBanner').style.display = 'block';
-      if (todayMsg && todayMsg.readStatus !== 'read') {
-        todayMsg.readStatus = 'read';
+      // Marcar como leído
+      if (currentMsg && currentMsg.readStatus !== 'read') {
+        currentMsg.readStatus = 'read';
         record.mensajes = msgs;
         saveRecord(record);
       }
     }
 
-    startCountdown(!!todayMsg);
+    startCountdown(!!currentMsg);
 
-    const history = msgs.filter(m => m.date !== today).reverse();
+    // Historial: todos excepto el actual
+    const history = msgs.filter(m => m.blockKey !== currentKey).reverse();
     document.getElementById('historyList').innerHTML = history.length
-      ? history.map(m => `<div class="history-item"><span>${escHtml(m.text)}</span><small>${m.date}</small></div>`).join('')
+      ? history.map(m => `
+          <div class="history-item">
+            <span>${escHtml(m.text)}</span>
+            <small>${m.sentAt || m.date || ''}</small>
+          </div>`).join('')
       : `<p style="text-align:center;font-family:'Caveat';opacity:0.5;margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
   }
 
@@ -286,29 +330,61 @@
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  // ============================================
+  // ENVIAR MENSAJE
+  // ============================================
   async function sendMessage() {
     const txt = document.getElementById('msgInput').value.trim();
     if (!txt) { showToast('Escribe algo primero 💭'); return; }
+
     document.getElementById('loader').style.display = 'flex';
     document.getElementById('sendBtn').disabled = true;
 
-    const record = await getRecord();
-    const msgs   = record.mensajes || [];
-    if (msgs.find(m => m.date === todayStr())) { showToast('Ya enviaste en este minuto ✅'); location.reload(); return; }
+    const record     = await getRecord();
+    const msgs       = record.mensajes || [];
+    const currentKey = getBlockKey();
 
-    msgs.push({ date: todayStr(), text: txt, readStatus: 'sent' });
+    if (msgs.find(m => m.blockKey === currentKey)) {
+      showToast('Ya enviaste en este bloque ✅');
+      location.reload(); return;
+    }
+
+    // Timestamp legible para mostrar
+    const now = new Date();
+    const sentAt = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
+
+    msgs.push({ blockKey: currentKey, sentAt, text: txt, readStatus: 'sent' });
     record.mensajes = msgs;
     await saveRecord(record);
 
-    // Email notification via EmailJS
-    try {
-      await sendEmailNotification(txt);
-    } catch(e) { console.warn('Email no enviado:', e); }
+    // Email via EmailJS
+    try { await sendEmailNotification(txt); }
+    catch(e) { console.warn('Email no enviado:', e); }
 
     showToast('¡Mensaje enviado con amor! 💌');
     setTimeout(() => location.reload(), 1500);
   }
 
+  // ============================================
+  // EMAIL via EmailJS
+  // ============================================
+  async function sendEmailNotification(msgText) {
+    try {
+      emailjs.init(EMAILJS_KEY);
+      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+        to_email: EMAIL_CONSTANZA,
+        message: msgText,
+        from_name: 'Ignacio'
+      });
+      console.log('✅ Email enviado');
+    } catch(e) {
+      console.warn('❌ Error email:', e);
+    }
+  }
+
+  // ============================================
+  // TOAST
+  // ============================================
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -316,26 +392,9 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // Email via EmailJS
-  async function sendEmailNotification(msgText) {
-    if (!EMAILJS_SERVICE || EMAILJS_SERVICE.includes('YOUR_')) {
-      console.warn('EmailJS no configurado. Configura tus credenciales en el código.');
-      return;
-    }
-    
-    try {
-      emailjs.init(EMAILJS_KEY);
-      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-        to_email: 'constanza.sotoo21@gmail.com', // Email de Constanza
-        message: msgText,
-        from_name: 'Ignacio'
-      });
-      console.log('Email enviado exitosamente');
-    } catch(e) {
-      console.warn('Error enviando email:', e);
-    }
-  }
-
+  // ============================================
+  // INIT
+  // ============================================
   (function() {
     const s = sessionStorage.getItem(SESSION_KEY);
     if (s) {
@@ -347,6 +406,7 @@
     }
   })();
 
+  // Flores flotantes
   function spawn() {
     const el = document.createElement('div');
     el.className = 'floatie';
