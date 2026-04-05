@@ -3,73 +3,263 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Para Ti 🌻</title>
+  <title>Amor Interestelar</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;600;700&family=Lora:ital@0;1&display=swap" rel="stylesheet"/>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
   <style>
     :root {
-      --cream: #fdf6e3; --warm: #f5e6c8; --gold: #e8a020;
-      --rose: #e8748a; --rose-light: #f0a0b0; --rose-pale: #fce8ed;
-      --green-light: #34c759; --brown: #7a5230; --ink: #3d2b1a;
+      --space-black: #0a0e27; --space-purple: #3d2a5e; --space-deep: #1a0f3a;
+      --nebula-pink: #e84b8a; --nebula-purple: #a855a8; --nebula-blue: #3b82f6;
+      --cosmic-cyan: #06b6d4; --stardust-gold: #f59e0b; --love-red: #ef4444;
+      --text-light: #f0f9ff; --text-secondary: #cbd5e1; --accent: rgba(232, 75, 138, 0.6);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    body { min-height: 100vh; background: var(--cream); font-family: 'Lora', serif; overflow-x: hidden; position: relative; }
+    body { 
+      min-height: 100vh; 
+      background: linear-gradient(180deg, #030608 0%, #0d0519 15%, #1a0f35 35%, #0f071e 55%, #1a0a2e 75%, #030608 100%);
+      font-family: 'Lora', serif; 
+      overflow-x: hidden; 
+      position: relative;
+      color: var(--text-light);
+      letter-spacing: 0.5px;
+    }
     body::before {
-      content: ''; position: fixed; inset: 0;
-      background: radial-gradient(ellipse at 20% 10%, rgba(255,220,120,0.25) 0%, transparent 50%),
-                  radial-gradient(ellipse at 80% 80%, rgba(232,116,138,0.15) 0%, transparent 50%);
-      pointer-events: none; z-index: 0;
+      content: ''; 
+      position: fixed; 
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 1800px 1400px at 25% 35%, rgba(180,50,255,0.35), transparent),
+        radial-gradient(ellipse 1600px 1200px at 75% 65%, rgba(255,20,147,0.3), transparent),
+        radial-gradient(ellipse 1400px 1000px at 50% 50%, rgba(138,43,226,0.25), transparent),
+        radial-gradient(ellipse 1200px 900px at 20% 80%, rgba(220,20,180,0.28), transparent),
+        radial-gradient(ellipse 1000px 800px at 80% 25%, rgba(100,50,200,0.22), transparent),
+        radial-gradient(ellipse 900px 700px at 40% 25%, rgba(255,50,150,0.2), transparent);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      animation: none;
+      pointer-events: none; 
+      z-index: 0;
     }
-    .floatie { position: fixed; pointer-events: none; z-index: 1; animation: floatUp linear infinite; opacity: 0; font-size: 1.4rem; }
+    body::after {
+      content: ''; 
+      position: fixed; 
+      inset: 0;
+      background: 
+        radial-gradient(1px 1px at 2% 5%, rgba(255,255,255,0.95), transparent),
+        radial-gradient(1px 1px at 5% 12%, rgba(200,220,255,0.9), transparent),
+        radial-gradient(1px 1px at 8% 8%, rgba(255,200,100,0.85), transparent),
+        radial-gradient(1px 1px at 12% 3%, rgba(255,255,200,0.9), transparent),
+        radial-gradient(1px 1px at 3% 25%, rgba(200,150,255,0.85), transparent),
+        radial-gradient(1px 1px at 15% 18%, rgba(255,150,200,0.9), transparent),
+        radial-gradient(1px 1px at 10% 35%, rgba(255,255,255,0.88), transparent),
+        radial-gradient(1px 1px at 18% 42%, rgba(200,255,200,0.8), transparent),
+        radial-gradient(1px 1px at 22% 15%, rgba(255,200,255,0.85), transparent),
+        radial-gradient(1px 1px at 28% 8%, rgba(255,255,255,0.92), transparent),
+        radial-gradient(1px 1px at 32% 30%, rgba(150,200,255,0.85), transparent),
+        radial-gradient(1px 1px at 38% 45%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 42% 20%, rgba(255,200,100,0.8), transparent),
+        radial-gradient(1px 1px at 48% 55%, rgba(200,150,255,0.85), transparent),
+        radial-gradient(1px 1px at 55% 12%, rgba(255,255,200,0.9), transparent),
+        radial-gradient(1px 1px at 60% 38%, rgba(255,255,255,0.92), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(200,220,255,0.88), transparent),
+        radial-gradient(1px 1px at 70% 48%, rgba(255,200,150,0.85), transparent),
+        radial-gradient(1px 1px at 75% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 80% 35%, rgba(200,150,255,0.85), transparent),
+        radial-gradient(1px 1px at 85% 22%, rgba(255,200,200,0.88), transparent),
+        radial-gradient(1px 1px at 90% 8%, rgba(255,255,255,0.95), transparent),
+        radial-gradient(1px 1px at 88% 42%, rgba(150,200,255,0.85), transparent),
+        radial-gradient(1px 1px at 95% 28%, rgba(255,150,255,0.9), transparent),
+        radial-gradient(1px 1px at 92% 52%, rgba(255,255,200,0.88), transparent),
+        radial-gradient(1px 1px at 25% 65%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 35% 72%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(1px 1px at 45% 68%, rgba(255,200,100,0.8), transparent),
+        radial-gradient(1px 1px at 55% 85%, rgba(255,255,255,0.92), transparent),
+        radial-gradient(1px 1px at 68% 78%, rgba(200,150,255,0.86), transparent),
+        radial-gradient(1px 1px at 75% 62%, rgba(255,200,150,0.85), transparent),
+        radial-gradient(1px 1px at 85% 75%, rgba(255,255,200,0.88), transparent),
+        radial-gradient(1px 1px at 40% 88%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 60% 92%, rgba(200,150,255,0.88), transparent),
+        radial-gradient(1px 1px at 78% 95%, rgba(255,200,200,0.85), transparent),
+        radial-gradient(1px 1px at 15% 88%, rgba(255,255,255,0.92), transparent),
+        radial-gradient(1px 1px at 18% 72%, rgba(150,200,255,0.85), transparent),
+        radial-gradient(1px 1px at 8% 58%, rgba(255,150,255,0.88), transparent),
+        radial-gradient(1px 1px at 12% 68%, rgba(255,255,200,0.9), transparent),
+        radial-gradient(1px 1px at 2% 45%, rgba(200,220,255,0.88), transparent),
+        radial-gradient(1px 1px at 5% 78%, rgba(255,200,100,0.85), transparent),
+        radial-gradient(1px 1px at 30% 52%, rgba(255,255,255,0.92), transparent),
+        radial-gradient(1px 1px at 20% 55%, rgba(200,150,255,0.86), transparent),
+        radial-gradient(1px 1px at 50% 35%, rgba(255,200,200,0.88), transparent),
+        radial-gradient(1px 1px at 72% 65%, rgba(255,255,200,0.9), transparent),
+        radial-gradient(1px 1px at 82% 58%, rgba(150,200,255,0.86), transparent),
+        radial-gradient(1px 1px at 35% 38%, rgba(255,150,255,0.88), transparent),
+        radial-gradient(1px 1px at 62% 18%, rgba(255,255,255,0.93), transparent),
+        radial-gradient(1px 1px at 78% 82%, rgba(200,220,255,0.87), transparent),
+        radial-gradient(1px 1px at 9% 92%, rgba(255,200,150,0.86), transparent);
+      background-size: 350% 350%, 360% 360%, 370% 370%, 340% 340%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%, 360% 360%, 370% 370%, 350% 350%, 355% 355%, 365% 365%, 340% 340%;
+      animation: none;
+      pointer-events: none; 
+      z-index: 0;
+    }
+    @keyframes cosmicDrift {
+      0%, 100% { filter: brightness(0.85) saturate(1) hue-rotate(0deg); transform: translate(0, 0); }
+      20% { filter: brightness(0.95) saturate(1.15) hue-rotate(5deg); transform: translate(8px, -8px); }
+      40% { filter: brightness(1) saturate(1.3) hue-rotate(-8deg); transform: translate(-5px, 10px); }
+      60% { filter: brightness(0.92) saturate(1.2) hue-rotate(10deg); transform: translate(6px, -6px); }
+      80% { filter: brightness(0.98) saturate(1.1) hue-rotate(-5deg); transform: translate(-8px, 5px); }
+    }
+    @keyframes galaxyShimmer {
+      0%, 100% { filter: drop-shadow(0 0 15px rgba(180,50,255,0.25)) drop-shadow(0 0 30px rgba(138,43,226,0.15)); }
+      25% { filter: drop-shadow(0 0 40px rgba(220,20,180,0.4)) drop-shadow(0 0 60px rgba(180,50,255,0.25)); }
+      50% { filter: drop-shadow(0 0 35px rgba(255,20,147,0.35)) drop-shadow(0 0 50px rgba(255,50,150,0.2)); }
+      75% { filter: drop-shadow(0 0 45px rgba(200,50,255,0.3)) drop-shadow(0 0 70px rgba(255,20,147,0.2)); }
+    }
+    @keyframes starTwinkle {
+      0%, 100% { opacity: 0.3; filter: drop-shadow(0 0 2px rgba(255,255,255,0.4)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
+    }
+    @keyframes starburst {
+      0%, 100% { opacity: 0.4; transform: scale(1); filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+      50% { opacity: 0.9; transform: scale(1.3); filter: drop-shadow(0 0 12px rgba(255,255,255,0.9)); }
+    }
+    @keyframes magicDust {
+      0% { opacity: 0; transform: translateY(100vh) translateX(0) scale(1.2) rotate(0deg); }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-200vh) translateX(150px) scale(0.3) rotate(720deg); }
+    }
+    @keyframes starTwinkle {
+      0%, 100% { opacity: 0.3; filter: drop-shadow(0 0 3px rgba(255,255,255,0.2)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)); }
+    }
+    @keyframes planetOrbit1 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes planetOrbit2 { 0% { transform: rotate(180deg); } 100% { transform: rotate(540deg); } }
+    @keyframes planetOrbit3 { 0% { transform: rotate(90deg); } 100% { transform: rotate(450deg); } }
+    @keyframes planetOrbit4 { 0% { transform: rotate(270deg); } 100% { transform: rotate(630deg); } }
+    @keyframes planetOrbit5 { 0% { transform: rotate(45deg); } 100% { transform: rotate(405deg); } }
+    @keyframes planetOrbit6 { 0% { transform: rotate(315deg); } 100% { transform: rotate(675deg); } }
+    @keyframes sunGlow { 0%, 100% { box-shadow: 0 0 80px rgba(245, 158, 11, 0.5), 0 0 120px rgba(245, 158, 11, 0.3), inset 0 0 50px rgba(255,200,100,0.4); } 50% { box-shadow: 0 0 100px rgba(245, 158, 11, 0.7), 0 0 150px rgba(245, 158, 11, 0.5), inset 0 0 60px rgba(255,200,100,0.6); } }
+    /* Sistema Solar */
+    .solar-system { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 740px; height: 740px; z-index: 1; pointer-events: none; }
+    .sun { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70px; height: 70px; background: radial-gradient(circle at 35% 35%, #fffccc, #ffed4e, #ffb700, #ff8c00); border-radius: 50%; box-shadow: 0 0 60px rgba(255, 200, 50, 0.8), 0 0 90px rgba(255, 150, 0, 0.5), 0 0 130px rgba(255, 100, 0, 0.3), inset 0 0 60px rgba(255,230,100,0.5); animation: sunGlow 4s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(255, 180, 0, 0.4)); }
+    .orbit { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 1px solid rgba(100, 150, 230, 0.1); border-radius: 50%; }
+    .orbit1 { width: 160px; height: 160px; animation: planetOrbit1 22s linear infinite; }
+    .orbit2 { width: 240px; height: 240px; animation: planetOrbit2 38s linear infinite; }
+    .orbit3 { width: 340px; height: 340px; animation: planetOrbit3 60s linear infinite; }
+    .orbit4 { width: 420px; height: 420px; animation: planetOrbit4 85s linear infinite; }
+    .orbit5 { width: 540px; height: 540px; animation: planetOrbit5 120s linear infinite; border-style: dashed; opacity: 0.6; }
+    .orbit6 { width: 680px; height: 680px; animation: planetOrbit6 180s linear infinite; }
+    .planet { position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-radius: 50%; box-shadow: 0 0 15px rgba(100,150,230,0.3); }
+    .planet-mercury { width: 10px; height: 10px; background: radial-gradient(circle at 32% 32%, #f5f5f5, #c0c0c0 40%, #808080 70%, #4a4a4a); box-shadow: 0 0 8px rgba(160,160,160,0.4), inset -1px -1px 2px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.2); position: relative; }
+    .planet-mercury::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0), rgba(0,0,0,0.3)); border-radius: 50%; }
+    .planet-venus { width: 20px; height: 20px; background: radial-gradient(circle at 35% 35%, #fffacd, #ffe4a0, #ffd060, #e8a600 70%, #cc8800); box-shadow: 0 0 12px rgba(255,180,50,0.4), inset -1px -1px 3px rgba(0,0,0,0.2); position: relative; }
+    .planet-venus::before { content: ''; position: absolute; inset: 0; background: conic-gradient(from 0deg, transparent 0deg, rgba(200,120,0,0.15) 45deg, transparent 90deg, rgba(200,120,0,0.1) 180deg, transparent 270deg, transparent 360deg); border-radius: 50%; }
+    .planet-venus::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 28% 28%, rgba(255,255,255,0.3), transparent 40%); border-radius: 50%; }
+    .planet-earth { width: 22px; height: 22px; background: radial-gradient(circle at 35% 35%, #87ceeb 0%, #1e90ff 25%, #0047ab 45%, #004d00 55%, #228b22 70%, #1a5f1a 85%, #0a0a2e); box-shadow: 0 0 15px rgba(30,144,255,0.5), inset -2px -2px 5px rgba(0,0,0,0.4), inset 1px 1px 3px rgba(255,255,255,0.2); position: relative; }
+    .planet-earth::before { content: ''; position: absolute; inset: 0; background: conic-gradient(from 45deg, transparent 0deg, rgba(255,255,255,0.25) 60deg, transparent 180deg, rgba(255,255,255,0.15) 270deg, transparent 360deg); border-radius: 50%; }
+    .planet-earth::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 32% 32%, rgba(255,255,255,0.4) 0%, transparent 35%); border-radius: 50%; }
+    .planet-mars { width: 15px; height: 15px; background: radial-gradient(circle at 30% 30%, #ff9955, #ff7f50, #cc4422, #8b3a0b 70%, #5a2a0a); box-shadow: 0 0 10px rgba(255,100,50,0.4), inset -1px -1px 3px rgba(0,0,0,0.3); position: relative; }
+    .planet-mars::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 40% 25%, rgba(255,200,100,0.2) 0%, transparent 30%); border-radius: 50%; }
+    .planet-mars::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2), transparent 40%); border-radius: 50%; }
+    .planet-jupiter { width: 35px; height: 35px; background: radial-gradient(circle at 35% 35%, #ffe5a0, #ffd280 15%, #d4a76a 35%, #c88b3a 50%, #8b5a00 70%, #5a3a00); box-shadow: 0 0 20px rgba(200,100,30,0.4), inset -2px -2px 6px rgba(0,0,0,0.3), inset 1px 1px 4px rgba(255,200,100,0.2); position: relative; }
+    .planet-jupiter::before { content: ''; position: absolute; top: 42%; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, rgba(100,50,0,0.6), transparent); box-shadow: 4px 0 0 -1px rgba(100,50,0,0.4), -4px 0 0 -1px rgba(100,50,0,0.4); }
+    .planet-jupiter::after { content: ''; position: absolute; inset: 5%; background: radial-gradient(circle at 65% 30%, rgba(255,100,0,0.3) 0%, transparent 40%); border-radius: 50%; }
+    .planet-saturn { width: 30px; height: 30px; background: radial-gradient(circle at 35% 35%, #ffecb8 0%, #ffd99b 20%, #d4b896 40%, #c9a876 60%, #a67c52 75%, #6a4d2e); box-shadow: 0 0 18px rgba(180,120,50,0.4), inset -2px -2px 5px rgba(0,0,0,0.3), inset 1px 1px 3px rgba(255,200,100,0.2); position: relative; }
+    .planet-saturn::before { content: ''; position: absolute; top: 45%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(80,50,20,0.5), transparent); }
+    .planet-saturn::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 40%); border-radius: 50%; }
+    .saturn-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateZ(25deg); width: 58px; height: 24px; border: 2.5px solid rgba(200,150,80,0.5); border-radius: 50%; box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.4), inset -1px 0 3px rgba(150,120,60,0.3); pointer-events: none; }
+    .saturn-ring::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(220,170,100,0.3); border-radius: 50%; }
+    @keyframes cosmicShimmer {
+      0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 3px rgba(232,75,138,0.6)); transform: scale(0.8); }
+      50% { opacity: 0.9; filter: drop-shadow(0 0 8px rgba(232,75,138,0.9)); transform: scale(1); }
+    }
+    /* Puntos de amor conectados */
+    .love-point { position: fixed; width: 6px; height: 6px; background: radial-gradient(circle at 30% 30%, rgba(255,100,150,0.8), rgba(232,75,138,0.6)); border-radius: 50%; box-shadow: 0 0 8px rgba(232, 75, 138, 0.6), inset 0 0 4px rgba(255,150,180,0.4); animation: cosmicShimmer 2.5s ease-in-out infinite; z-index: 1; pointer-events: none; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .floatie { position: fixed; pointer-events: none; z-index: 1; animation: magicDust linear infinite; opacity: 0; font-size: 2rem; filter: drop-shadow(0 0 15px rgba(232,75,138,0.5)); text-shadow: 0 0 20px rgba(232,75,138,0.4); }
     @keyframes floatUp {
-      0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-      10% { opacity: 0.7; }
-      100% { transform: translateY(-100vh) rotate(360deg) scale(1.1); opacity: 0; }
+      0% { transform: translateY(0) rotate(0deg) scale(0.7); opacity: 0; }
+      8% { opacity: 0.5; }
+      92% { opacity: 0.5; }
+      100% { transform: translateY(-110vh) rotate(360deg) scale(1); opacity: 0; }
     }
-    #loginScreen { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: var(--cream); transition: opacity 0.6s; }
-    .login-card { width: 90%; max-width: 380px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-radius: 24px; padding: 2rem; text-align: center; border: 1px solid rgba(232,116,138,0.25); box-shadow: 0 8px 32px rgba(232,116,138,0.1); }
-    .login-card h1 { font-family: 'Playfair Display', serif; color: var(--rose); margin-bottom: 0.3rem; }
-    .login-card p { font-family: 'Caveat', cursive; color: #999; margin-bottom: 1.5rem; font-size: 1rem; }
-    .login-field { margin-bottom: 1rem; text-align: left; }
-    .login-field label { display: block; font-family: 'Caveat', cursive; font-size: 1rem; margin-bottom: 0.3rem; color: var(--brown); }
-    .login-field input { width: 100%; border: 1.5px solid rgba(232,116,138,0.3); border-radius: 12px; padding: 0.8rem; font-family: 'Caveat', cursive; font-size: 1.1rem; outline: none; background: rgba(255,255,255,0.9); transition: border-color 0.2s; }
-    .login-field input:focus { border-color: var(--rose); }
-    .login-btn { width: 100%; background: linear-gradient(135deg, var(--rose), #d4506a); color: white; border: none; border-radius: 12px; padding: 0.9rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(232,116,138,0.35); transition: all 0.2s; }
-    .login-btn:hover { transform: translateY(-1px); }
-    #app { display: none; position: relative; z-index: 2; padding: 1.5rem; max-width: 640px; margin: 0 auto; }
-    #app.visible { display: block; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .logout-btn { background: none; border: 1px solid rgba(122,82,48,0.2); border-radius: 20px; padding: 0.4rem 0.8rem; cursor: pointer; font-family: 'Caveat', cursive; font-size: 0.95rem; color: var(--brown); }
-    .board-wrapper { position: relative; padding-right: 56px; }
-    .board-frame { background: var(--brown); border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    .board { background: #1e1008; border-radius: 6px; padding: 2rem; min-height: 200px; text-align: center; color: #fdf0dc; position: relative; }
-    .chalk-text { font-family: 'Caveat', cursive; font-size: 1.8rem; line-height: 1.4; white-space: pre-wrap; }
-    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; border-radius: 6px; font-size: 2rem; }
-    .ticks-panel { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: none; flex-direction: column; align-items: center; gap: 4px; width: 48px; }
-    .tick-row { display: flex; align-items: center; gap: 1px; }
-    .tick { font-size: 1.4rem; line-height: 1; font-weight: bold; }
-    .tick-label { font-family: 'Caveat', cursive; font-size: 0.65rem; text-align: center; line-height: 1.1; margin-top: 2px; }
-    .countdown-box { margin-top: 1.5rem; background: rgba(255,255,255,0.75); backdrop-filter: blur(8px); border: 1px solid rgba(232,116,138,0.2); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; }
-    .countdown-label { font-family: 'Caveat', cursive; font-size: 0.95rem; color: #888; margin-bottom: 0.3rem; }
-    .countdown-time { font-family: 'Caveat', cursive; font-size: 2.2rem; color: var(--rose); font-weight: 700; letter-spacing: 3px; }
-    .countdown-done { font-family: 'Caveat', cursive; font-size: 1.3rem; color: #34c759; }
-    .write-panel { margin-top: 2rem; background: var(--rose-pale); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(232,116,138,0.15); }
-    .write-panel h3 { font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 1rem; color: var(--brown); }
-    textarea { width: 100%; height: 100px; border-radius: 10px; padding: 1rem; font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 1rem; border: 1px solid var(--rose-light); outline: none; resize: vertical; background: white; }
-    textarea:focus { border-color: var(--rose); }
-    #sendBtn { width: 100%; background: linear-gradient(135deg, var(--rose), #d4506a); color: white; border: none; border-radius: 12px; padding: 0.9rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(232,116,138,0.3); transition: all 0.2s; }
-    #sendBtn:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
-    .history-section { margin-top: 3rem; margin-bottom: 3rem; }
-    .history-section h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; text-align: center; color: var(--brown); margin-bottom: 1rem; }
-    .history-item { background: white; margin-top: 0.5rem; padding: 1rem; border-radius: 10px; display: flex; justify-content: space-between; align-items: flex-start; font-family: 'Caveat', cursive; box-shadow: 0 2px 8px rgba(0,0,0,0.05); gap: 1rem; }
-    .history-item span { flex: 1; font-size: 1.05rem; }
-    .history-item small { opacity: 0.45; white-space: nowrap; font-size: 0.85rem; }
-    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--rose); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; transition: 0.4s; z-index: 1000; font-family: 'Caveat', cursive; font-size: 1rem; white-space: nowrap; }
+    #loginScreen { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(10,14,39,0.97), rgba(26,15,58,0.97)), radial-gradient(ellipse at 20% 30%, rgba(168,85,247,0.1), transparent), radial-gradient(ellipse at 80% 70%, rgba(236,72,153,0.08), transparent); transition: opacity 0.6s; }
+    .login-card { width: 90%; max-width: 400px; background: rgba(26,31,51,0.92); backdrop-filter: blur(40px); border-radius: 20px; padding: 2.5rem; text-align: center; border: 1px solid rgba(232,75,138,0.3); box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1), 0 0 40px rgba(232,75,138,0.2); animation: slideIn 0.6s ease-out; }
+    .login-card h1 { font-family: 'Playfair Display', serif; color: var(--nebula-pink); margin-bottom: 0.5rem; font-size: 2.2rem; font-weight: 700; letter-spacing: 1.5px; text-shadow: 0 0 20px rgba(232,75,138,0.3); }
+    .login-card p { font-family: 'Lora', serif; color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem; font-weight: 300; }
+    .login-field { margin-bottom: 1.3rem; text-align: left; }
+    .login-field label { display: block; font-family: 'Lora', serif; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+    .login-field input { width: 100%; border: 1px solid rgba(232,75,138,0.25); border-radius: 10px; padding: 0.95rem 1rem; font-family: 'Lora', serif; font-size: 1rem; outline: none; background: rgba(59,130,246,0.05); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); color: var(--text-light); }
+    .login-field input::placeholder { color: var(--text-secondary); opacity: 0.5; }
+    .login-field input:focus { border-color: rgba(232,75,138,0.5); box-shadow: 0 0 0 3px rgba(232,75,138,0.15), inset 0 1px 2px rgba(0,0,0,0.2); background: rgba(59,130,246,0.1); }
+    .login-btn { width: 100%; background: linear-gradient(135deg, #e84b8a, #d97ec3); color: white; border: none; border-radius: 10px; padding: 1rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(232,75,138,0.35); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); font-weight: 500; letter-spacing: 0.5px; }
+    .login-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(232,75,138,0.55), 0 0 30px rgba(232,75,138,0.3); }
+    .login-btn:active { transform: translateY(-1px); }
+    #app { display: none; position: relative; z-index: 2; padding: 2rem 1.5rem; max-width: 660px; margin: 0 auto; }
+    #app.visible { display: block; animation: slideIn 0.6s ease-out; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .logout-btn { background: rgba(232,75,138,0.12); border: 1px solid rgba(232,75,138,0.35); border-radius: 20px; padding: 0.5rem 1.2rem; cursor: pointer; font-family: 'Lora', serif; font-size: 0.9rem; color: var(--nebula-pink); transition: all 0.35s; font-weight: 500; }
+    .logout-btn:hover { background: rgba(232,75,138,0.25); border-color: rgba(232,75,138,0.6); box-shadow: 0 4px 15px rgba(232,75,138,0.3); }
+    .board-wrapper { position: relative; padding-right: 70px; }
+    .board-frame { background: rgba(59,130,246,0.08); border-radius: 16px; padding: 2px; box-shadow: inset 0 2px 8px rgba(255,255,255,0.08), 0 0 30px rgba(168,85,247,0.2); border: 1px solid rgba(232,75,138,0.2); }
+    .board { background: linear-gradient(135deg, rgba(26,31,51,0.7), rgba(45,42,70,0.8)); border-radius: 14px; padding: 2.5rem; min-height: 240px; text-align: center; color: var(--text-light); position: relative; border: 1px solid rgba(168,85,247,0.2); backdrop-filter: blur(10px); }
+    .chalk-text { font-family: 'Playfair Display', serif; font-size: 1.95rem; line-height: 1.6; white-space: pre-wrap; color: #06b6d4; font-weight: 400; letter-spacing: 0.5px; text-shadow: 0 0 15px rgba(6,182,212,0.3); }
+    .loading-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center; border-radius: 14px; font-size: 2.5rem; backdrop-filter: blur(2px); }
+    .ticks-panel { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); display: none; flex-direction: column; align-items: center; gap: 3px; width: 50px; }
+    .tick-row { display: flex; align-items: center; gap: 0px; }
+    .tick { font-size: 1.2rem; line-height: 1; font-weight: 500; }
+    .tick-label { font-family: 'Lora', serif; font-size: 0.7rem; text-align: center; line-height: 1.2; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .countdown-box { margin-top: 2rem; background: rgba(59,130,246,0.08); backdrop-filter: blur(15px); border: 1px solid rgba(168,85,247,0.2); border-radius: 16px; padding: 1.5rem; text-align: center; box-shadow: inset 0 1px 2px rgba(255,255,255,0.08), 0 0 20px rgba(168,85,247,0.15); }
+    .countdown-label { font-family: 'Lora', serif; font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+    .countdown-time { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: #f59e0b; font-weight: 700; letter-spacing: 4px; text-shadow: 0 0 15px rgba(245,158,11,0.3); }
+    .countdown-done { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #ef4444; font-weight: 500; }
+    .write-panel { margin-top: 2.5rem; background: rgba(168,85,247,0.08); padding: 2rem; border-radius: 16px; border: 1px solid rgba(168,85,247,0.2); box-shadow: inset 0 1px 2px rgba(255,255,255,0.08), 0 0 20px rgba(168,85,247,0.1); }
+    .write-panel h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1.3rem; color: var(--nebula-pink); font-weight: 500; }
+    textarea { width: 100%; height: 110px; border-radius: 10px; padding: 1.1rem; font-family: 'Lora', serif; font-size: 1.05rem; margin-bottom: 1.3rem; border: 1px solid rgba(168,85,247,0.2); outline: none; resize: vertical; background: rgba(59,130,246,0.05); color: var(--text-light); transition: all 0.35s cubic-bezier(0.4,0,0.2,1); line-height: 1.6; }
+    textarea::placeholder { color: var(--text-secondary); opacity: 0.5; }
+    textarea:focus { border-color: rgba(232,75,138,0.4); box-shadow: 0 0 0 3px rgba(232,75,138,0.12), inset 0 1px 2px rgba(0,0,0,0.2); background: rgba(59,130,246,0.08); }
+    #sendBtn { width: 100%; background: linear-gradient(135deg, #e84b8a, #d97ec3); color: white; border: none; border-radius: 10px; padding: 1rem; font-family: 'Playfair Display', serif; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 25px rgba(232,75,138,0.35); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); font-weight: 500; letter-spacing: 0.5px; }
+    #sendBtn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(232,75,138,0.55), 0 0 30px rgba(232,75,138,0.3); }
+    #sendBtn:disabled { background: rgba(144,144,144,0.3); box-shadow: none; cursor: not-allowed; opacity: 0.6; }
+    #sendBtn:active:not(:disabled) { transform: translateY(-1px); }
+    .history-section { margin-top: 3.5rem; margin-bottom: 2rem; }
+    .history-section h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; text-align: center; color: var(--nebula-pink); margin-bottom: 1.5rem; font-weight: 500; }
+    .history-item { background: rgba(59,130,246,0.06); margin-top: 0.7rem; padding: 1.2rem; border-radius: 10px; display: flex; justify-content: space-between; align-items: flex-start; font-family: 'Lora', serif; box-shadow: inset 0 1px 2px rgba(255,255,255,0.06); gap: 1.2rem; border: 1px solid rgba(168,85,247,0.15); color: var(--text-light); transition: all 0.3s; }
+    .history-item:hover { background: rgba(59,130,246,0.12); border-color: rgba(232,75,138,0.25); }
+    .history-item span { flex: 1; font-size: 1rem; color: var(--text-light); line-height: 1.5; }
+    .history-item small { opacity: 0.7; white-space: nowrap; font-size: 0.8rem; color: var(--text-secondary); }
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120px); background: linear-gradient(135deg, #e84b8a, #d97ec3); color: white; padding: 0.95rem 1.8rem; border-radius: 50px; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); z-index: 1000; font-family: 'Lora', serif; font-size: 0.95rem; white-space: nowrap; box-shadow: 0 10px 30px rgba(232,75,138,0.45), 0 0 25px rgba(232,75,138,0.2); font-weight: 500; letter-spacing: 0.3px; }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    .readonly-banner { text-align: center; margin-top: 2rem; font-family: 'Caveat', cursive; font-size: 1.1rem; opacity: 0.7; }
+    .readonly-banner { text-align: center; margin-top: 2rem; font-family: 'Lora', serif; font-size: 0.95rem; color: var(--text-secondary); opacity: 0.9; font-weight: 300; letter-spacing: 0.5px; }
+    /* Elementos cósmicos realistas */
+    .cosmic-element { position: fixed; pointer-events: none; z-index: 1; }
   </style>
 </head>
 <body>
+
+<div class="solar-system" id="solarSystem">
+  <div class="sun"></div>
+  <div class="orbit orbit1">
+    <div class="planet planet-mercury"></div>
+  </div>
+  <div class="orbit orbit2">
+    <div class="planet planet-venus"></div>
+  </div>
+  <div class="orbit orbit3">
+    <div class="planet planet-earth"></div>
+  </div>
+  <div class="orbit orbit4">
+    <div class="planet planet-mars"></div>
+  </div>
+  <div class="orbit orbit5">
+    <div class="planet planet-jupiter"></div>
+  </div>
+  <div class="orbit orbit6">
+    <div class="planet planet-saturn">
+      <div class="saturn-ring"></div>
+    </div>
+  </div>
+</div>
 
 <div id="toast"></div>
 
@@ -90,18 +280,19 @@
       <input type="password" id="loginPassword" placeholder="Tu contraseña"/>
     </div>
     <button class="login-btn" onclick="doLogin()">Entrar 🌸</button>
-    <p id="loginError" style="color:#e8748a; font-size:0.85rem; margin-top:10px; font-family:'Caveat'"></p>
+    <p id="loginError" style="color: var(--nebula-pink); font-size: 0.85rem; margin-top: 1rem; font-family: 'Lora', serif; font-weight: 400;"></p>
   </div>
 </div>
 
 <div id="app">
   <div class="top-bar">
-    <div id="userBadge" style="font-family:'Caveat'; font-size:1.2rem; color:var(--brown);"></div>
+    <div id="userBadge" style="font-family:'Playfair Display'; font-size: 1rem; color: var(--cosmic-cyan); font-weight: 500; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(6,182,212,0.4);"></div>
     <button class="logout-btn" onclick="doLogout()">Salir 🚪</button>
   </div>
 
-  <header style="text-align:center; margin-bottom:2rem;">
-    <h1 style="font-family:'Playfair Display'; color:var(--rose); font-size:1.8rem;">Para Ti, Mi Amor</h1>
+  <header style="text-align:center; margin-bottom:3rem; animation: slideIn 0.8s ease-out 0.2s backwards;">
+    <h1 style="font-family:'Playfair Display'; color: var(--nebula-pink); font-size: 2.4rem; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 0.5rem; text-shadow: 0 0 25px rgba(232,75,138,0.3);">Para Ti, Mi Amor 💫</h1>
+    <p style="font-family:'Lora', serif; color: var(--text-secondary); font-size: 0.9rem; font-weight: 300; letter-spacing: 0.5px;">Amor en el Infinito Cósmico</p>
   </header>
 
   <div class="board-wrapper">
@@ -109,7 +300,7 @@
       <div class="board">
         <div id="loader" class="loading-overlay">⏳</div>
         <div id="chalkText" class="chalk-text">Cargando mensaje...</div>
-        <div id="boardDate" style="margin-top:1rem; opacity:0.5; font-size:0.8rem; font-family:'Caveat';"></div>
+        <div id="boardDate" style="margin-top: 1.2rem; opacity: 0.8; font-size: 0.85rem; font-family: 'Lora'; color: var(--stardust-gold); letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(245,158,11,0.2);"></div>
       </div>
     </div>
     <div class="ticks-panel" id="ticksPanel">
@@ -152,15 +343,7 @@
   const BIN_ID   = '69c762eeaa77b81da92a5074';
   const API_KEY  = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL  = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-  const EMAILJS_SERVICE  = 'service_y50id6k';
-  const EMAILJS_TEMPLATE = 'template_6lp3xj3';
-  const EMAILJS_KEY      = 'W8t7bdDfFqpekh1pg';
-  const EMAIL_CONSTANZA  = 'constanza.sotoo21@gmail.com';
-
-  // ⏱️ Minutos de espera entre mensajes
-  const MINUTOS_ESPERA = 2;
-  const MS_ESPERA = MINUTOS_ESPERA * 60 * 1000;
+  const MS_ESPERA = 120000; // 2 minutos
 
   const USERS = {
     'ignacio calderon': { password: 'Corte123@',  role: 'writer', display: 'Ignacio',   emoji: '✍️' },
@@ -268,14 +451,14 @@
     const lbl = document.getElementById('tickLabel');
     panel.style.display = 'flex';
     if (status === 'read') {
-      t1.style.color = '#34c759'; t2.style.color = '#34c759';
-      t2.style.display = 'inline'; lbl.textContent = 'Visto 💚'; lbl.style.color = '#34c759';
+      t1.style.color = '#06b6d4'; t2.style.color = '#06b6d4';
+      t2.style.display = 'inline'; lbl.textContent = 'Visto 💕'; lbl.style.color = '#06b6d4';
     } else if (status === 'delivered') {
-      t1.style.color = '#aaa'; t2.style.color = '#aaa';
-      t2.style.display = 'inline'; lbl.textContent = 'Entregado'; lbl.style.color = '#aaa';
+      t1.style.color = '#f59e0b'; t2.style.color = '#f59e0b';
+      t2.style.display = 'inline'; lbl.textContent = 'Entregado'; lbl.style.color = '#f59e0b';
     } else {
-      t1.style.color = '#aaa'; t2.style.display = 'none';
-      lbl.textContent = 'Enviado'; lbl.style.color = '#aaa';
+      t1.style.color = '#cbd5e1'; t2.style.display = 'none';
+      lbl.textContent = 'Enviado'; lbl.style.color = '#cbd5e1';
     }
   }
 
@@ -357,10 +540,6 @@
     record.mensajes = msgs;
     await saveRecord(record);
 
-    // Email via EmailJS
-    try { await sendEmailNotification(txt); }
-    catch(e) { console.warn('Email no enviado:', e); }
-
     showToast('¡Mensaje enviado con amor! 💌');
     setTimeout(() => location.reload(), 1500);
   }
@@ -368,20 +547,6 @@
   // ============================================
   // EMAIL via EmailJS
   // ============================================
-  async function sendEmailNotification(msgText) {
-    try {
-      emailjs.init(EMAILJS_KEY);
-      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-        to_email: EMAIL_CONSTANZA,
-        message: msgText,
-        from_name: 'Ignacio'
-      });
-      console.log('✅ Email enviado');
-    } catch(e) {
-      console.warn('❌ Error email:', e);
-    }
-  }
-
   // ============================================
   // TOAST
   // ============================================
@@ -406,18 +571,19 @@
     }
   })();
 
-  // Flores flotantes
-  function spawn() {
-    const el = document.createElement('div');
-    el.className = 'floatie';
-    el.textContent = ['🌻','💛','🌸','✨'][Math.floor(Math.random()*4)];
-    el.style.left = Math.random()*90+'vw';
-    el.style.bottom = '-20px';
-    el.style.animationDuration = (5+Math.random()*5)+'s';
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 10000);
+  // Elementos de amor - Deshabilitados
+  function spawnCosmic() {
+    // Deshabilitado - sin vida en el espacio
+    return;
   }
-  setInterval(spawn, 3000);
+  // setInterval(spawnCosmic, 2000);
+
+  // Partículas flotantes de amor - Deshabilitadas
+  function spawnLoveParticle() {
+    // Deshabilitado - sin vida en el espacio
+    return;
+  }
+  // setInterval(spawnLoveParticle, 2500);
 </script>
 </body>
 </html>
