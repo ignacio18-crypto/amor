@@ -438,6 +438,16 @@
 
   const SESSION_KEY = 'spiderlove_session_v2';
 
+  // SMS de aviso: pon aquí el número de Constanza con código de país (Chile = +56)
+  const CONSTANZA_PHONE = '+56972850740';
+  const SITE_URL = 'https://ignacio18-crypto.github.io/amor/';
+  const SMS_TEXT = 'Tienes un mensaje 💌 ' + SITE_URL;
+
+  function openSms() {
+    // Abre la app de mensajes con el texto listo; solo falta tocar "Enviar"
+    window.location.href = 'sms:' + CONSTANZA_PHONE + '?&body=' + encodeURIComponent(SMS_TEXT);
+  }
+
   // ============================================
   // PESTAÑAS / AUTH
   // ============================================
@@ -595,6 +605,7 @@
       input.value = '';
       showToast('¡Mensaje lanzado como telaraña! 🕷️💌');
       await render();
+      setTimeout(openSms, 600);
     } catch (e) {
       showToast('Error al enviar 💔');
     } finally {
