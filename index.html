@@ -12,10 +12,7 @@
       --card-bg: rgba(12,0,30,0.92); --text: #fff5f5; --text-dim: rgba(255,245,245,0.6);
     }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      min-height: 100vh; background: var(--bg);
-      font-family: 'Nunito', sans-serif; overflow-x: hidden; color: var(--text);
-    }
+    body { min-height: 100vh; background: var(--bg); font-family: 'Nunito', sans-serif; overflow-x: hidden; color: var(--text); }
     .bg-layer {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
@@ -35,58 +32,37 @@
     /* LOGIN */
     #loginScreen {
       position: fixed; inset: 0; z-index: 200; overflow-y: auto;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(5,0,15,0.95);
+      display: flex; align-items: center; justify-content: center; background: rgba(5,0,15,0.95);
     }
     .login-card {
-      width: 92%; max-width: 420px; margin: 1rem 0;
-      background: var(--card-bg); border-radius: 20px;
-      border: 2px solid rgba(200,0,0,0.4);
-      box-shadow: 0 0 60px rgba(200,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+      width: 92%; max-width: 420px; margin: 1rem 0; background: var(--card-bg); border-radius: 20px;
+      border: 2px solid rgba(200,0,0,0.4); box-shadow: 0 0 60px rgba(200,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
       overflow: hidden; animation: cardDrop 0.5s cubic-bezier(0.34,1.56,0.64,1);
     }
-    @keyframes cardDrop {
-      from { transform: translateY(-60px) scale(0.9); opacity: 0; }
-      to   { transform: translateY(0) scale(1); opacity: 1; }
-    }
+    @keyframes cardDrop { from { transform: translateY(-60px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
     .spidey-scene {
-      position: relative; height: 220px;
-      background: linear-gradient(180deg, #1a0000 0%, #0a0020 100%);
+      position: relative; height: 220px; background: linear-gradient(180deg, #1a0000 0%, #0a0020 100%);
       border-bottom: 2px solid rgba(200,0,0,0.3); overflow: hidden;
     }
     .web-top { position: absolute; top: 0; left: 0; right: 0; height: 100%; pointer-events: none; }
     .web-string {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 2px; height: 90px;
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 2px; height: 90px;
       background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
       filter: drop-shadow(0 0 3px rgba(255,255,255,0.4));
     }
     .spidey-wrapper {
       position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
-      animation: spideySway 3s ease-in-out infinite;
-      filter: drop-shadow(0 10px 20px rgba(200,0,0,0.4));
+      animation: spideySway 3s ease-in-out infinite; filter: drop-shadow(0 10px 20px rgba(200,0,0,0.4));
     }
-    @keyframes spideySway {
-      0%,100% { transform: translateX(-50%) rotate(-4deg); }
-      50%      { transform: translateX(-50%) rotate(4deg); }
-    }
-    .spidey-hearts span {
-      position: absolute; font-size: 1.2rem;
-      animation: heartBeat 2s ease-in-out infinite;
-      filter: drop-shadow(0 0 8px rgba(255,77,128,0.8));
-    }
-    @keyframes heartBeat {
-      0%,100% { transform: scale(1); opacity:0.8; }
-      50%      { transform: scale(1.3); opacity:1; }
-    }
+    @keyframes spideySway { 0%,100% { transform: translateX(-50%) rotate(-4deg); } 50% { transform: translateX(-50%) rotate(4deg); } }
+    .spidey-hearts span { position: absolute; font-size: 1.2rem; animation: heartBeat 2s ease-in-out infinite; filter: drop-shadow(0 0 8px rgba(255,77,128,0.8)); }
+    @keyframes heartBeat { 0%,100% { transform: scale(1); opacity:0.8; } 50% { transform: scale(1.3); opacity:1; } }
 
-    /* PESTAÑAS */
     .login-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .tab-btn {
       flex: 1; padding: 0.9rem 0.5rem; background: transparent; border: none;
       font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 1.5px;
-      color: var(--text-dim); cursor: pointer; transition: all 0.3s;
-      border-bottom: 3px solid transparent;
+      color: var(--text-dim); cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;
     }
     .tab-btn.active { color: #fff; background: rgba(200,0,0,0.12); border-bottom-color: var(--spider-red); }
     .tab-btn:hover { color: #fff; }
@@ -95,30 +71,22 @@
 
     .login-form { padding: 1.8rem 2rem 2rem; }
     .login-title {
-      font-family: 'Bangers', cursive; font-size: 2.2rem; color: var(--spider-red);
-      text-align: center; letter-spacing: 3px; margin-bottom: 0.2rem;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.5), 0 0 20px rgba(227,21,21,0.5);
+      font-family: 'Bangers', cursive; font-size: 2.2rem; color: var(--spider-red); text-align: center;
+      letter-spacing: 3px; margin-bottom: 0.2rem; text-shadow: 3px 3px 0 rgba(0,0,0,0.5), 0 0 20px rgba(227,21,21,0.5);
     }
     .login-sub { text-align: center; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.5rem; font-weight: 300; }
     .field { margin-bottom: 1rem; }
-    .field label {
-      display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.5px; color: rgba(255,100,100,0.8); margin-bottom: 0.4rem;
-    }
+    .field label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,100,100,0.8); margin-bottom: 0.4rem; }
     .field input {
-      width: 100%; background: rgba(255,255,255,0.05);
-      border: 1.5px solid rgba(200,0,0,0.25); border-radius: 10px; padding: 0.85rem 1rem;
-      color: var(--text); font-family: 'Nunito', sans-serif; font-size: 0.95rem;
-      outline: none; transition: all 0.3s;
+      width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(200,0,0,0.25); border-radius: 10px;
+      padding: 0.85rem 1rem; color: var(--text); font-family: 'Nunito', sans-serif; font-size: 0.95rem; outline: none; transition: all 0.3s;
     }
     .field input::placeholder { color: rgba(255,255,255,0.25); }
     .field input:focus { border-color: rgba(200,0,0,0.6); box-shadow: 0 0 0 3px rgba(200,0,0,0.15); background: rgba(255,255,255,0.08); }
     .login-btn {
-      width: 100%; margin-top: 0.5rem;
-      background: linear-gradient(135deg, #cc0000, #ff2020, #cc0000); background-size: 200%;
-      color: white; border: none; border-radius: 12px; padding: 1rem;
-      font-family: 'Bangers', cursive; font-size: 1.4rem; letter-spacing: 2px;
-      cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(200,0,0,0.4);
+      width: 100%; margin-top: 0.5rem; background: linear-gradient(135deg, #cc0000, #ff2020, #cc0000); background-size: 200%;
+      color: white; border: none; border-radius: 12px; padding: 1rem; font-family: 'Bangers', cursive; font-size: 1.4rem;
+      letter-spacing: 2px; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(200,0,0,0.4);
     }
     .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(200,0,0,0.55); }
     .login-btn:active { transform: translateY(0); }
@@ -133,99 +101,95 @@
     @keyframes fadeUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
     .top-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1.5rem; padding: 0.8rem 1rem;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding: 0.8rem 1rem;
       background: rgba(200,0,0,0.1); border-radius: 12px; border: 1px solid rgba(200,0,0,0.2);
     }
     .user-badge { font-family: 'Bangers', cursive; font-size: 1.3rem; letter-spacing: 1.5px; color: var(--spider-red); text-shadow: 0 0 10px rgba(227,21,21,0.4); }
     .logout-btn {
-      background: rgba(200,0,0,0.15); border: 1px solid rgba(200,0,0,0.3); border-radius: 20px;
-      padding: 0.4rem 1rem; color: rgba(255,150,150,0.9); font-family: 'Nunito', sans-serif;
-      font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+      background: rgba(200,0,0,0.15); border: 1px solid rgba(200,0,0,0.3); border-radius: 20px; padding: 0.4rem 1rem;
+      color: rgba(255,150,150,0.9); font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
     }
     .logout-btn:hover { background: rgba(200,0,0,0.3); }
 
-    .main-title { text-align: center; margin-bottom: 2rem; }
-    .main-title h1 {
-      font-family: 'Bangers', cursive; font-size: 3rem; color: var(--spider-red);
-      letter-spacing: 3px; text-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 30px rgba(227,21,21,0.4); line-height: 1;
-    }
+    .main-title { text-align: center; margin-bottom: 1.5rem; }
+    .main-title h1 { font-family: 'Bangers', cursive; font-size: 3rem; color: var(--spider-red); letter-spacing: 3px; text-shadow: 4px 4px 0 rgba(0,0,0,0.5), 0 0 30px rgba(227,21,21,0.4); line-height: 1; }
     .main-title p { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; letter-spacing: 0.5px; }
 
+    /* NAV entre ventanas */
+    .nav-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .nav-btn {
+      flex: 1; position: relative; padding: 0.8rem 0.5rem; border-radius: 12px; cursor: pointer;
+      background: rgba(255,255,255,0.04); border: 1.5px solid rgba(200,0,0,0.25); color: var(--text-dim);
+      font-family: 'Bangers', cursive; font-size: 1.1rem; letter-spacing: 1px; transition: all 0.3s;
+    }
+    .nav-btn.active { color: #fff; background: rgba(200,0,0,0.2); border-color: var(--spider-red); box-shadow: 0 0 15px rgba(200,0,0,0.3); }
+    .nav-btn .dot {
+      display: none; position: absolute; top: -6px; right: -4px; min-width: 22px; height: 22px; padding: 0 6px;
+      border-radius: 11px; background: var(--heart-pink); color: #fff; font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem; font-weight: 800; line-height: 22px; text-align: center; box-shadow: 0 0 10px rgba(255,77,128,0.7);
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+
     .board-card {
-      background: var(--card-bg); border-radius: 18px; border: 2px solid rgba(200,0,0,0.3);
-      overflow: hidden; box-shadow: 0 0 40px rgba(200,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-      margin-bottom: 1.5rem;
+      background: var(--card-bg); border-radius: 18px; border: 2px solid rgba(200,0,0,0.3); overflow: hidden;
+      box-shadow: 0 0 40px rgba(200,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05); margin-bottom: 1.5rem;
     }
     .board-header {
-      background: linear-gradient(135deg, rgba(200,0,0,0.3), rgba(0,0,200,0.2));
-      padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(200,0,0,0.3), rgba(0,0,200,0.2)); padding: 0.8rem 1.5rem;
+      display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .board-header span { font-family: 'Bangers', cursive; font-size: 1.1rem; letter-spacing: 1px; }
-    .board-body {
-      padding: 2rem 1.8rem; min-height: 160px; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; position: relative;
-    }
-    .msg-text {
-      font-family: 'Caveat', cursive; font-size: 2rem; line-height: 1.5; text-align: center;
-      color: #fff; white-space: pre-wrap; text-shadow: 0 0 20px rgba(255,77,128,0.3);
-    }
+    .board-body { padding: 2rem 1.8rem; min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    .msg-text { font-family: 'Caveat', cursive; font-size: 2rem; line-height: 1.5; text-align: center; color: #fff; white-space: pre-wrap; text-shadow: 0 0 20px rgba(255,77,128,0.3); }
     .msg-date { margin-top: 1rem; font-size: 0.78rem; color: var(--text-dim); letter-spacing: 0.5px; }
-    .board-loader {
-      position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none;
-      align-items: center; justify-content: center; font-size: 2rem; backdrop-filter: blur(3px);
-    }
+    .board-loader { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; font-size: 2rem; backdrop-filter: blur(3px); }
     .ticks-row { display: none; align-items: center; gap: 4px; margin-top: 0.8rem; font-size: 0.78rem; color: var(--text-dim); }
     .tick-icon { font-size: 1rem; }
 
     .write-panel {
-      background: var(--card-bg); border: 2px solid rgba(0,0,200,0.25); border-radius: 18px;
-      padding: 1.8rem; margin-bottom: 1.5rem; display: none; box-shadow: 0 0 30px rgba(0,0,180,0.15);
+      background: var(--card-bg); border: 2px solid rgba(0,0,200,0.25); border-radius: 18px; padding: 1.8rem;
+      margin-bottom: 1.5rem; display: none; box-shadow: 0 0 30px rgba(0,0,180,0.15);
     }
-    .write-panel h3 {
-      font-family: 'Bangers', cursive; font-size: 1.5rem; letter-spacing: 2px;
-      color: rgba(100,150,255,0.9); margin-bottom: 1.2rem; text-shadow: 0 0 10px rgba(100,150,255,0.3);
-    }
+    .write-panel h3 { font-family: 'Bangers', cursive; font-size: 1.5rem; letter-spacing: 2px; color: rgba(100,150,255,0.9); margin-bottom: 1.2rem; text-shadow: 0 0 10px rgba(100,150,255,0.3); }
+    .write-panel.pink { border-color: rgba(255,77,128,0.35); box-shadow: 0 0 30px rgba(255,77,128,0.15); }
+    .write-panel.pink h3 { color: var(--heart-pink); text-shadow: 0 0 10px rgba(255,77,128,0.3); }
     textarea {
-      width: 100%; height: 110px; background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(0,0,200,0.2); border-radius: 12px; padding: 1rem;
-      color: var(--text); font-family: 'Caveat', cursive; font-size: 1.3rem;
-      outline: none; resize: vertical; transition: all 0.3s; margin-bottom: 1rem;
+      width: 100%; height: 110px; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(0,0,200,0.2); border-radius: 12px;
+      padding: 1rem; color: var(--text); font-family: 'Caveat', cursive; font-size: 1.3rem; outline: none; resize: vertical; transition: all 0.3s; margin-bottom: 1rem;
     }
     textarea::placeholder { color: rgba(255,255,255,0.2); }
     textarea:focus { border-color: rgba(0,0,255,0.4); box-shadow: 0 0 0 3px rgba(0,0,255,0.1); }
-    #sendBtn {
-      width: 100%; background: linear-gradient(135deg, #0000cc, #2222ff, #0000cc);
-      color: white; border: none; border-radius: 12px; padding: 1rem;
-      font-family: 'Bangers', cursive; font-size: 1.5rem; letter-spacing: 2px;
-      cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,200,0.3);
+    textarea:disabled { opacity: 0.4; }
+    .write-panel.pink textarea { border-color: rgba(255,77,128,0.25); }
+    .write-panel.pink textarea:focus { border-color: rgba(255,77,128,0.6); box-shadow: 0 0 0 3px rgba(255,77,128,0.15); }
+    .send-btn {
+      width: 100%; background: linear-gradient(135deg, #0000cc, #2222ff, #0000cc); color: white; border: none; border-radius: 12px;
+      padding: 1rem; font-family: 'Bangers', cursive; font-size: 1.5rem; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 20px rgba(0,0,200,0.3);
     }
-    #sendBtn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,200,0.5); }
-    #sendBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .send-btn.pink { background: linear-gradient(135deg, #d6246e, #ff4d80, #d6246e); box-shadow: 0 5px 20px rgba(255,77,128,0.4); }
+    .send-btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .cooldown-note { text-align: center; font-size: 0.85rem; color: var(--gold); margin-bottom: 1rem; font-weight: 600; display: none; }
 
     .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
     .history-section { margin-top: 2rem; }
-    .history-title {
-      font-family: 'Bangers', cursive; font-size: 1.6rem; letter-spacing: 2px; text-align: center;
-      color: rgba(255,100,100,0.8); margin-bottom: 1rem; text-shadow: 0 0 10px rgba(200,0,0,0.3);
-    }
+    .history-title { font-family: 'Bangers', cursive; font-size: 1.6rem; letter-spacing: 2px; text-align: center; color: rgba(255,100,100,0.8); margin-bottom: 1rem; text-shadow: 0 0 10px rgba(200,0,0,0.3); }
     .history-item {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.6rem;
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; transition: all 0.3s;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 1rem 1.2rem;
+      margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; transition: all 0.3s;
     }
     .history-item:hover { background: rgba(200,0,0,0.08); border-color: rgba(200,0,0,0.2); }
+    .history-item.pink { border-color: rgba(255,77,128,0.2); }
+    .history-item.pink:hover { background: rgba(255,77,128,0.08); }
     .history-item .h-text { font-family: 'Caveat', cursive; font-size: 1.15rem; color: var(--text); flex:1; white-space: pre-wrap; }
     .history-item .h-date { font-size: 0.75rem; color: var(--text-dim); white-space: nowrap; }
 
     #toast {
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120px);
-      background: linear-gradient(135deg, #cc0000, #ff4444); color: white;
-      padding: 0.8rem 1.5rem; border-radius: 50px; z-index: 1000;
-      font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 1px;
-      box-shadow: 0 8px 25px rgba(200,0,0,0.45);
+      background: linear-gradient(135deg, #cc0000, #ff4444); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; z-index: 1000;
+      font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 1px; box-shadow: 0 8px 25px rgba(200,0,0,0.45);
       transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap;
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
@@ -236,17 +200,10 @@
 
     .spider-deco { position: fixed; top: -20px; right: 80px; z-index: 3; pointer-events: none; animation: spiderDrop 6s ease-in-out infinite; }
     @keyframes spiderDrop { 0% { top: -20px; } 40% { top: 120px; } 60% { top: 120px; } 100% { top: -20px; } }
-    .spider-string-deco {
-      position: fixed; top: 0; right: 100px; z-index: 2; pointer-events: none;
-      width: 1px; background: rgba(255,255,255,0.25); animation: spiderStringDrop 6s ease-in-out infinite;
-    }
+    .spider-string-deco { position: fixed; top: 0; right: 100px; z-index: 2; pointer-events: none; width: 1px; background: rgba(255,255,255,0.25); animation: spiderStringDrop 6s ease-in-out infinite; }
     @keyframes spiderStringDrop { 0% { height: 0px; } 40% { height: 140px; } 60% { height: 140px; } 100% { height: 0px; } }
 
-    .comic-badge {
-      display: inline-block; background: var(--spider-red); color: white;
-      font-family: 'Bangers', cursive; font-size: 0.9rem; letter-spacing: 1px;
-      padding: 0.2rem 0.7rem; border-radius: 20px; margin-bottom: 0.8rem;
-    }
+    .comic-badge { display: inline-block; background: var(--spider-red); color: white; font-family: 'Bangers', cursive; font-size: 0.9rem; letter-spacing: 1px; padding: 0.2rem 0.7rem; border-radius: 20px; margin-bottom: 0.8rem; }
   </style>
 </head>
 <body>
@@ -341,13 +298,11 @@
       <div style="position:absolute; bottom:15px; right:15px; font-size:1.3rem; animation: heartBeat 2.2s infinite 0.3s;">💖</div>
     </div>
 
-    <!-- Pestañas -->
     <div class="login-tabs">
       <button class="tab-btn active" id="tabBtnC" onclick="switchTab('C')">💕 Constanza</button>
       <button class="tab-btn" id="tabBtnI" onclick="switchTab('I')">🕷️ Ignacio</button>
     </div>
 
-    <!-- Pestaña Constanza: sin credenciales -->
     <div class="tab-panel active" id="panelC">
       <div class="login-form">
         <div class="login-title">¡Hola, Constanza! 💕</div>
@@ -357,23 +312,13 @@
       </div>
     </div>
 
-    <!-- Pestaña Ignacio: con credenciales -->
     <div class="tab-panel" id="panelI">
       <div class="login-form">
         <div class="login-title">¡Hola, héroe! 🕷️</div>
         <div class="login-sub">Tu rincón secreto de amor</div>
-        <div class="field">
-          <label>Nombre</label>
-          <input type="text" id="loginNombre" placeholder="Tu nombre" autocomplete="given-name"/>
-        </div>
-        <div class="field">
-          <label>Apellido</label>
-          <input type="text" id="loginApellido" placeholder="Tu apellido" autocomplete="family-name"/>
-        </div>
-        <div class="field">
-          <label>Contraseña</label>
-          <input type="password" id="loginPassword" placeholder="Tu contraseña secreta"/>
-        </div>
+        <div class="field"><label>Nombre</label><input type="text" id="loginNombre" placeholder="Tu nombre" autocomplete="given-name"/></div>
+        <div class="field"><label>Apellido</label><input type="text" id="loginApellido" placeholder="Tu apellido" autocomplete="family-name"/></div>
+        <div class="field"><label>Contraseña</label><input type="password" id="loginPassword" placeholder="Tu contraseña secreta"/></div>
         <button class="login-btn" onclick="doLogin()">¡ENTRAR AL MULTIVERSO! 💥</button>
         <div id="loginError"></div>
       </div>
@@ -393,33 +338,56 @@
     <p>Mensajes desde el multiverso del corazón</p>
   </div>
 
-  <div class="board-card">
-    <div class="board-header"><span>📡 ÚLTIMO MENSAJE</span></div>
-    <div class="board-body">
-      <div class="board-loader" id="loader">⏳</div>
-      <div class="comic-badge" id="fromBadge" style="display:none;">De: Ignacio 🕷️</div>
-      <div class="msg-text" id="msgText">Cargando mensaje...</div>
-      <div class="msg-date" id="msgDate"></div>
-      <div class="ticks-row" id="ticksRow">
-        <span class="tick-icon" id="tick1">✓</span>
-        <span class="tick-icon" id="tick2" style="display:none;">✓</span>
-        <span id="tickLabel" style="font-size:0.78rem;">Enviado</span>
+  <!-- Navegación entre ventanas -->
+  <div class="nav-tabs">
+    <button class="nav-btn active" id="navMine" onclick="showView('mine')"></button>
+    <button class="nav-btn" id="navC" onclick="showView('c')"><span id="navCLabel"></span><span class="dot" id="navDot">0</span></button>
+  </div>
+
+  <!-- VENTANA 1: mensajes de Ignacio -->
+  <div class="view active" id="viewMine">
+    <div class="board-card">
+      <div class="board-header"><span>📡 ÚLTIMO MENSAJE</span></div>
+      <div class="board-body">
+        <div class="board-loader" id="loader">⏳</div>
+        <div class="comic-badge" id="fromBadge" style="display:none;">De: Ignacio 🕷️</div>
+        <div class="msg-text" id="msgText">Cargando mensaje...</div>
+        <div class="msg-date" id="msgDate"></div>
+        <div class="ticks-row" id="ticksRow">
+          <span class="tick-icon" id="tick1">✓</span>
+          <span class="tick-icon" id="tick2" style="display:none;">✓</span>
+          <span id="tickLabel" style="font-size:0.78rem;">Enviado</span>
+        </div>
       </div>
+    </div>
+
+    <div class="write-panel" id="writePanel">
+      <h3>✍️ TU MENSAJE DE AMOR</h3>
+      <textarea id="msgInput" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">🕷️ LANZAR MENSAJE 💌</button>
+    </div>
+
+    <div class="readonly-msg" id="readonlyBanner">🌻 Aquí aparecerán los mensajes de tu héroe favorito 💛</div>
+
+    <div class="history-section">
+      <div class="history-title">📜 MENSAJES PASADOS</div>
+      <div id="historyList"></div>
     </div>
   </div>
 
-  <!-- Panel de escritura (solo Ignacio) -->
-  <div class="write-panel" id="writePanel">
-    <h3>✍️ TU MENSAJE DE AMOR</h3>
-    <textarea id="msgInput" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
-    <button id="sendBtn" onclick="sendMessage()">🕷️ LANZAR MENSAJE 💌</button>
-  </div>
+  <!-- VENTANA 2: mensajes de Constanza -->
+  <div class="view" id="viewC">
+    <div class="write-panel pink" id="cWritePanel">
+      <h3>💕 ESCRÍBELE A TU HÉROE</h3>
+      <div class="cooldown-note" id="cooldownNote"></div>
+      <textarea id="cMsgInput" maxlength="1000" placeholder="Cuéntale lo que sientes... (1 mensaje cada 24 horas)"></textarea>
+      <button class="send-btn pink" id="cSendBtn" onclick="sendConstanzaMessage()">💌 ENVIAR MENSAJE 💕</button>
+    </div>
 
-  <div class="readonly-msg" id="readonlyBanner">🌻 Aquí aparecerán los mensajes de tu héroe favorito 💛</div>
-
-  <div class="history-section">
-    <div class="history-title">📜 MENSAJES PASADOS</div>
-    <div id="historyList"></div>
+    <div class="history-section" style="margin-top:0;">
+      <div class="history-title" id="cListTitle">💕 MENSAJES DE CONSTANZA</div>
+      <div id="cList"></div>
+    </div>
   </div>
 </div>
 
@@ -430,21 +398,20 @@
   const BIN_ID  = '69c762eeaa77b81da92a5074';
   const API_KEY = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  const POLL_MS = 10000; // refresca cada 10 s
+  const POLL_MS = 10000;
+  const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 1 mensaje de Constanza cada 24 h
 
-  // Solo Ignacio tiene credenciales
   const IGNACIO = { key: 'ignacio calderon', password: 'Corte123@', role: 'writer', display: 'Ignacio 🕷️' };
   const CONSTANZA = { key: 'constanza', role: 'viewer', display: 'Constanza 💕' };
 
   const SESSION_KEY = 'spiderlove_session_v2';
+  const SEEN_KEY = 'spiderlove_seen_c';
 
-  // SMS de aviso: pon aquí el número de Constanza con código de país (Chile = +56)
   const CONSTANZA_PHONE = '+56972850740';
   const SITE_URL = 'https://ignacio18-crypto.github.io/amor/';
   const SMS_TEXT = 'Tienes un mensaje 💌 ' + SITE_URL;
 
   function openSms() {
-    // Abre la app de mensajes con el texto listo; solo falta tocar "Enviar"
     window.location.href = 'sms:' + CONSTANZA_PHONE + '?&body=' + encodeURIComponent(SMS_TEXT);
   }
 
@@ -458,9 +425,7 @@
     document.getElementById('panelI').classList.toggle('active', t === 'I');
   }
 
-  function normalize(s) {
-    return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  }
+  function normalize(s) { return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 
   function enterAsConstanza() {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(CONSTANZA));
@@ -486,22 +451,25 @@
   });
 
   // ============================================
-  // JSONBIN
+  // JSONBIN (mensajes = Ignacio, mensajesConstanza = Constanza)
   // ============================================
   async function getRecord() {
-    try {
-      const res  = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-      const data = await res.json();
-      return data.record || { mensajes: [] };
-    } catch(e) { return { mensajes: [] }; }
+    const res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+    if (!res.ok) throw new Error('No se pudo leer');
+    const data = await res.json();
+    const rec = data.record || {};
+    if (!Array.isArray(rec.mensajes)) rec.mensajes = [];
+    if (!Array.isArray(rec.mensajesConstanza)) rec.mensajesConstanza = [];
+    return rec;
   }
 
   async function saveRecord(record) {
-    await fetch(BIN_URL, {
+    const res = await fetch(BIN_URL, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
       body: JSON.stringify(record)
     });
+    if (!res.ok) throw new Error('No se pudo guardar');
   }
 
   // ============================================
@@ -526,16 +494,69 @@
   }
 
   // ============================================
-  // RENDER
+  // VENTANAS
   // ============================================
   let currentSession = null;
+  let currentView = 'mine';
+  let lastCTs = 0;       // fecha del último mensaje de Constanza
+  let cCount = 0;        // total de mensajes de Constanza
 
+  function getSeen() { try { return parseInt(localStorage.getItem(SEEN_KEY) || '0', 10) || 0; } catch(e) { return 0; } }
+  function setSeen(n) { try { localStorage.setItem(SEEN_KEY, String(n)); } catch(e) {} }
+
+  function showView(v) {
+    currentView = v;
+    document.getElementById('viewMine').classList.toggle('active', v === 'mine');
+    document.getElementById('viewC').classList.toggle('active', v === 'c');
+    document.getElementById('navMine').classList.toggle('active', v === 'mine');
+    document.getElementById('navC').classList.toggle('active', v === 'c');
+    if (v === 'c' && currentSession.role === 'writer') { setSeen(cCount); updateDot(); }
+  }
+
+  function updateDot() {
+    const dot = document.getElementById('navDot');
+    if (currentSession.role !== 'writer') { dot.style.display = 'none'; return; }
+    const unseen = cCount - getSeen();
+    if (unseen > 0 && currentView !== 'c') { dot.textContent = unseen; dot.style.display = 'block'; }
+    else dot.style.display = 'none';
+  }
+
+  // ============================================
+  // 24 HORAS (Constanza)
+  // ============================================
+  function updateCooldown() {
+    if (!currentSession || currentSession.role !== 'viewer') return;
+    const btn = document.getElementById('cSendBtn');
+    const inp = document.getElementById('cMsgInput');
+    const note = document.getElementById('cooldownNote');
+    const left = lastCTs ? (lastCTs + COOLDOWN_MS) - Date.now() : 0;
+    if (left > 0) {
+      const s = Math.floor(left / 1000);
+      const hh = String(Math.floor(s / 3600)).padStart(2,'0');
+      const mm = String(Math.floor((s % 3600) / 60)).padStart(2,'0');
+      const ss = String(s % 60).padStart(2,'0');
+      note.style.display = 'block';
+      note.textContent = `⏳ Podrás escribir de nuevo en ${hh}:${mm}:${ss}`;
+      btn.disabled = true; inp.disabled = true;
+    } else {
+      note.style.display = 'none';
+      btn.disabled = false; inp.disabled = false;
+    }
+  }
+  setInterval(updateCooldown, 1000);
+
+  // ============================================
+  // RENDER
+  // ============================================
   async function render() {
     const session = currentSession;
-    const record  = await getRecord();
-    const msgs    = record.mensajes || [];
-    const last    = msgs[msgs.length - 1];
+    let record;
+    try { record = await getRecord(); } catch(e) { return; }
+    const msgs = record.mensajes;
+    const cMsgs = record.mensajesConstanza;
+    const last = msgs[msgs.length - 1];
 
+    // Mensajes de Ignacio
     const fromBadge = document.getElementById('fromBadge');
     if (last) {
       fromBadge.style.display = 'inline-block';
@@ -555,16 +576,9 @@
     } else {
       document.getElementById('readonlyBanner').style.display = last ? 'none' : 'block';
       document.getElementById('ticksRow').style.display = 'none';
-      // Marcar todos los mensajes pendientes como vistos
-      const unread = msgs.some(m => m.readStatus !== 'read');
-      if (unread) {
-        msgs.forEach(m => { m.readStatus = 'read'; });
-        record.mensajes = msgs;
-        saveRecord(record);
-      }
+      if (msgs.some(m => m.readStatus !== 'read')) markRead();
     }
 
-    // Historial: todos menos el último, del más nuevo al más viejo
     const history = msgs.slice(0, -1).reverse();
     document.getElementById('historyList').innerHTML = history.length
       ? history.map(m => `
@@ -573,14 +587,47 @@
             <span class="h-date">${escHtml(m.sentAt || '')}</span>
           </div>`).join('')
       : `<p style="text-align:center;opacity:0.4;font-family:'Caveat';font-size:1.1rem;margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
+
+    // Mensajes de Constanza
+    cCount = cMsgs.length;
+    lastCTs = cCount ? (cMsgs[cCount - 1].ts || 0) : 0;
+    const cHtml = cMsgs.slice().reverse().map(m => `
+      <div class="history-item pink">
+        <span class="h-text">${escHtml(m.text)}</span>
+        <span class="h-date">${escHtml(m.sentAt || '')}</span>
+      </div>`).join('');
+    const empty = session.role === 'writer'
+      ? 'Constanza aún no te ha escrito 💌'
+      : 'Aún no has escrito mensajes 🌻';
+    document.getElementById('cList').innerHTML = cHtml
+      || `<p style="text-align:center;opacity:0.4;font-family:'Caveat';font-size:1.1rem;margin-top:1rem;">${empty}</p>`;
+
+    if (session.role === 'writer' && currentView === 'c') setSeen(cCount);
+    updateDot();
+    updateCooldown();
+  }
+
+  // Marca como vistos releyendo justo antes de guardar (evita pisar mensajes nuevos)
+  async function markRead() {
+    try {
+      const rec = await getRecord();
+      let changed = false;
+      rec.mensajes.forEach(m => { if (m.readStatus !== 'read') { m.readStatus = 'read'; changed = true; } });
+      if (changed) await saveRecord(rec);
+    } catch(e) {}
   }
 
   function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
+  function nowLabel() {
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} - ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+
   // ============================================
-  // ENVIAR (sin límite de mensajes)
+  // ENVIAR — Ignacio
   // ============================================
   async function sendMessage() {
     const input = document.getElementById('msgInput');
@@ -593,13 +640,7 @@
 
     try {
       const record = await getRecord();
-      const msgs   = record.mensajes || [];
-
-      const now = new Date();
-      const sentAt = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}`;
-
-      msgs.push({ id: String(Date.now()), sentAt, text: txt, readStatus: 'sent' });
-      record.mensajes = msgs;
+      record.mensajes.push({ id: String(Date.now()), sentAt: nowLabel(), text: txt, readStatus: 'sent' });
       await saveRecord(record);
 
       input.value = '';
@@ -610,6 +651,37 @@
       showToast('Error al enviar 💔');
     } finally {
       document.getElementById('loader').style.display = 'none';
+      btn.disabled = false;
+    }
+  }
+
+  // ============================================
+  // ENVIAR — Constanza (1 cada 24 h, verificado contra la base de datos)
+  // ============================================
+  async function sendConstanzaMessage() {
+    const input = document.getElementById('cMsgInput');
+    const btn = document.getElementById('cSendBtn');
+    const txt = input.value.trim();
+    if (!txt) { showToast('Escribe algo primero 💭'); return; }
+
+    btn.disabled = true;
+    try {
+      const record = await getRecord();
+      const list = record.mensajesConstanza;
+      const lastTs = list.length ? (list[list.length - 1].ts || 0) : 0;
+      if (lastTs && Date.now() - lastTs < COOLDOWN_MS) {
+        showToast('Ya enviaste tu mensaje de hoy 💕');
+        await render();
+        return;
+      }
+      list.push({ id: String(Date.now()), ts: Date.now(), sentAt: nowLabel(), text: txt });
+      await saveRecord(record);
+
+      input.value = '';
+      showToast('¡Mensaje enviado! 💌💕');
+      await render();
+    } catch (e) {
+      showToast('Error al enviar 💔');
       btn.disabled = false;
     }
   }
@@ -653,8 +725,21 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('app').classList.add('visible');
       document.getElementById('userBadge').textContent = currentSession.display;
+
+      if (currentSession.role === 'writer') {
+        document.getElementById('navMine').textContent = '💌 Mis mensajes';
+        document.getElementById('navCLabel').textContent = '💕 De Constanza';
+        document.getElementById('cWritePanel').style.display = 'none';
+        document.getElementById('cListTitle').textContent = '💕 MENSAJES DE CONSTANZA';
+      } else {
+        document.getElementById('navMine').textContent = '🕷️ De Ignacio';
+        document.getElementById('navCLabel').textContent = '✍️ Escribir';
+        document.getElementById('cWritePanel').style.display = 'block';
+        document.getElementById('cListTitle').textContent = '📜 TUS MENSAJES ENVIADOS';
+      }
+
       render();
-      setInterval(render, POLL_MS); // actualiza solo, sin recargar
+      setInterval(render, POLL_MS);
     }
   })();
 </script>
