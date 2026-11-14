@@ -379,8 +379,7 @@
   <div class="view" id="viewC">
     <div class="write-panel pink" id="cWritePanel">
       <h3>💕 ESCRÍBELE A TU HÉROE</h3>
-      <div class="cooldown-note" id="cooldownNote"></div>
-      <textarea id="cMsgInput" maxlength="1000" placeholder="Cuéntale lo que sientes... (1 mensaje cada 24 horas)"></textarea>
+      <textarea id="cMsgInput" maxlength="1000" placeholder="Cuéntale lo que sientes..."></textarea>
       <button class="send-btn pink" id="cSendBtn" onclick="sendConstanzaMessage()">💌 ENVIAR MENSAJE 💕</button>
     </div>
 
@@ -399,7 +398,6 @@
   const API_KEY = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
   const POLL_MS = 10000;
-  const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 1 mensaje de Constanza cada 24 h
 
   const IGNACIO = { key: 'ignacio calderon', password: 'Corte123@', role: 'writer', display: 'Ignacio 🕷️' };
   const CONSTANZA = { key: 'constanza', role: 'viewer', display: 'Constanza 💕' };
@@ -498,7 +496,6 @@
   // ============================================
   let currentSession = null;
   let currentView = 'mine';
-  let lastCTs = 0;       // fecha del último mensaje de Constanza
   let cCount = 0;        // total de mensajes de Constanza
 
   function getSeen() { try { return parseInt(localStorage.getItem(SEEN_KEY) || '0', 10) || 0; } catch(e) { return 0; } }
@@ -520,30 +517,6 @@
     if (unseen > 0 && currentView !== 'c') { dot.textContent = unseen; dot.style.display = 'block'; }
     else dot.style.display = 'none';
   }
-
-  // ============================================
-  // 24 HORAS (Constanza)
-  // ============================================
-  function updateCooldown() {
-    if (!currentSession || currentSession.role !== 'viewer') return;
-    const btn = document.getElementById('cSendBtn');
-    const inp = document.getElementById('cMsgInput');
-    const note = document.getElementById('cooldownNote');
-    const left = lastCTs ? (lastCTs + COOLDOWN_MS) - Date.now() : 0;
-    if (left > 0) {
-      const s = Math.floor(left / 1000);
-      const hh = String(Math.floor(s / 3600)).padStart(2,'0');
-      const mm = String(Math.floor((s % 3600) / 60)).padStart(2,'0');
-      const ss = String(s % 60).padStart(2,'0');
-      note.style.display = 'block';
-      note.textContent = `⏳ Podrás escribir de nuevo en ${hh}:${mm}:${ss}`;
-      btn.disabled = true; inp.disabled = true;
-    } else {
-      note.style.display = 'none';
-      btn.disabled = false; inp.disabled = false;
-    }
-  }
-  setInterval(updateCooldown, 1000);
 
   // ============================================
   // RENDER
@@ -590,7 +563,6 @@
 
     // Mensajes de Constanza
     cCount = cMsgs.length;
-    lastCTs = cCount ? (cMsgs[cCount - 1].ts || 0) : 0;
     const cHtml = cMsgs.slice().reverse().map(m => `
       <div class="history-item pink">
         <span class="h-text">${escHtml(m.text)}</span>
@@ -604,7 +576,6 @@
 
     if (session.role === 'writer' && currentView === 'c') setSeen(cCount);
     updateDot();
-    updateCooldown();
   }
 
   // Marca como vistos releyendo justo antes de guardar (evita pisar mensajes nuevos)
@@ -656,7 +627,7 @@
   }
 
   // ============================================
-  // ENVIAR — Constanza (1 cada 24 h, verificado contra la base de datos)
+  // ENVIAR — Constanza (sin límite)
   // ============================================
   async function sendConstanzaMessage() {
     const input = document.getElementById('cMsgInput');
@@ -668,12 +639,6 @@
     try {
       const record = await getRecord();
       const list = record.mensajesConstanza;
-      const lastTs = list.length ? (list[list.length - 1].ts || 0) : 0;
-      if (lastTs && Date.now() - lastTs < COOLDOWN_MS) {
-        showToast('Ya enviaste tu mensaje de hoy 💕');
-        await render();
-        return;
-      }
       list.push({ id: String(Date.now()), ts: Date.now(), sentAt: nowLabel(), text: txt });
       await saveRecord(record);
 
@@ -682,6 +647,7 @@
       await render();
     } catch (e) {
       showToast('Error al enviar 💔');
+    } finally {
       btn.disabled = false;
     }
   }
