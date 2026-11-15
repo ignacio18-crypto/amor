@@ -446,8 +446,7 @@
       <div class="login-form">
         <div class="login-title">¡Hola, héroe! 🕷️</div>
         <div class="login-sub">Tu rincón secreto de amor</div>
-        <div class="field"><label>Nombre</label><input type="text" id="loginNombre" placeholder="Tu nombre" autocomplete="given-name"/></div>
-        <div class="field"><label>Apellido</label><input type="text" id="loginApellido" placeholder="Tu apellido" autocomplete="family-name"/></div>
+        <div class="field"><label>Nombre</label><input type="text" id="loginNombre" placeholder="Tu nombre" autocomplete="off"/></div>
         <div class="field"><label>Contraseña</label><input type="password" id="loginPassword" placeholder="Tu contraseña secreta"/></div>
         <button class="login-btn" onclick="doLogin()">¡ENTRAR AL MULTIVERSO! 💥</button>
         <div id="loginError"></div>
@@ -540,7 +539,7 @@
   const CLOUD_NAME    = 'lep7yplv';  // <-- pon aquí tu Cloud name
   const UPLOAD_PRESET = 'spiderlove';  // <-- pon aquí tu Upload preset (modo Unsigned)
 
-  const IGNACIO = { key: 'ignacio calderon', password: 'Corte123@', role: 'writer', display: 'Ignacio 🕷️' };
+  const IGNACIO = { key: 'ignacio', password: '1942', role: 'writer', display: 'Ignacio 🕷️' };
   const CONSTANZA = { key: 'constanza', role: 'viewer', display: 'Constanza 💕' };
 
   const SESSION_KEY = 'spiderlove_session_v2';
@@ -573,10 +572,9 @@
 
   function doLogin() {
     const n  = normalize(document.getElementById('loginNombre').value);
-    const a  = normalize(document.getElementById('loginApellido').value);
     const pw = document.getElementById('loginPassword').value.trim();
     const err = document.getElementById('loginError');
-    if (n + ' ' + a !== IGNACIO.key) { err.textContent = '¡Solo el héroe puede entrar aquí! 💔'; return; }
+    if (n !== IGNACIO.key) { err.textContent = '¡Solo el héroe puede entrar aquí! 💔'; return; }
     if (pw !== IGNACIO.password)     { err.textContent = '¡Contraseña incorrecta! 🔐'; return; }
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ key: IGNACIO.key, role: IGNACIO.role, display: IGNACIO.display }));
     location.reload();
