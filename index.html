@@ -210,6 +210,24 @@
     @keyframes spiderStringDrop { 0% { height: 0px; } 40% { height: 140px; } 60% { height: 140px; } 100% { height: 0px; } }
 
     .comic-badge { display: inline-block; background: var(--spider-red); color: white; font-family: 'Bangers', cursive; font-size: 0.9rem; letter-spacing: 1px; padding: 0.2rem 0.7rem; border-radius: 20px; margin-bottom: 0.8rem; }
+
+    /* INTRO CONSTANZA */
+    #introScreen { position: fixed; inset: 0; z-index: 300; background: #000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; transition: opacity 0.8s ease; padding: env(safe-area-inset-top) 1rem env(safe-area-inset-bottom); }
+    #introScreen.hide { opacity: 0; pointer-events: none; }
+    .intro-dot { position: absolute; border-radius: 50%; background: #fff; animation: twinkle 3s ease-in-out infinite; }
+    @keyframes twinkle { 0%,100% { opacity: 0.15; } 50% { opacity: 0.95; } }
+    .intro-scene { position: relative; z-index: 2; width: min(100%, 400px); max-height: 66vh; max-height: 66dvh; height: auto; }
+    .big-star { transform-box: fill-box; transform-origin: center; animation: starPulse 2.4s ease-in-out infinite; }
+    @keyframes starPulse { 0%,100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.18); opacity: 1; } }
+    .kid { animation: kidBreath 3.2s ease-in-out infinite; }
+    @keyframes kidBreath { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+    .beam { stroke-dasharray: 4 6; animation: beamMove 1.5s linear infinite; }
+    @keyframes beamMove { to { stroke-dashoffset: -20; } }
+    .shooting { position: absolute; top: 12%; left: 10%; width: 90px; height: 2px; z-index: 1; background: linear-gradient(90deg, rgba(255,255,255,0), #fff); transform: rotate(25deg); opacity: 0; animation: shoot 7s ease-in 2s infinite; }
+    @keyframes shoot { 0% { opacity: 0; transform: translate(0,0) rotate(25deg); } 3% { opacity: 1; } 10% { opacity: 0; transform: translate(220px,100px) rotate(25deg); } 100% { opacity: 0; } }
+    .intro-text { position: relative; z-index: 2; font-family: 'Caveat', cursive; font-size: 1.9rem; color: #fff; text-align: center; margin-top: 0.4rem; text-shadow: 0 0 18px rgba(255,255,255,0.45); opacity: 0; animation: introFade 1.5s ease 1.2s forwards; }
+    #introBtn { position: relative; z-index: 2; width: auto; padding: 0.8rem 2.2rem; margin-top: 1rem; opacity: 0; animation: introFade 1.5s ease 2.6s forwards; }
+    @keyframes introFade { to { opacity: 1; } }
   </style>
 </head>
 <body>
@@ -234,6 +252,112 @@
     <path d="M120,0 Q90,60 0,120"/><path d="M160,20 Q120,80 20,160"/>
   </g>
 </svg>
+
+
+<!-- INTRO CONSTANZA -->
+<div id="introScreen">
+  <div class="shooting"></div>
+  <svg class="intro-scene" viewBox="0 0 360 520" xmlns="http://www.w3.org/2000/svg" aria-label="Un niño mira una estrella con su telescopio">
+    <defs>
+      <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+        <stop offset="30%" stop-color="#fff3b0" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#fff3b0" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Estrella más brillante -->
+    <g class="big-star">
+      <circle cx="270" cy="90" r="55" fill="url(#starGlow)"/>
+      <path d="M270 44 L274.5 85.5 L316 90 L274.5 94.5 L270 136 L265.5 94.5 L224 90 L265.5 85.5 Z" fill="#ffffff"/>
+      <path d="M270 66 L272 88 L294 90 L272 92 L270 114 L268 92 L246 90 L268 88 Z" fill="#fffbe0"/>
+      <circle cx="270" cy="90" r="6" fill="#ffffff"/>
+    </g>
+
+    <!-- Rayo de luz hacia el telescopio -->
+    <line class="beam" x1="228" y1="162" x2="266" y2="98" stroke="#fff6c8" stroke-width="1.5" opacity="0.5"/>
+
+    <!-- Suelo -->
+    <path d="M0 468 Q120 440 360 462 L360 520 L0 520 Z" fill="#0b0b12" stroke="#1b1b2a" stroke-width="1.5"/>
+
+    <!-- Trípode -->
+    <g stroke="#8a8a99" stroke-width="3.5" stroke-linecap="round">
+      <line x1="174" y1="259" x2="150" y2="448"/>
+      <line x1="174" y1="259" x2="192" y2="452"/>
+      <line x1="174" y1="259" x2="232" y2="444"/>
+    </g>
+    <circle cx="174" cy="259" r="5" fill="#b9b9c9"/>
+
+    <g class="kid">
+      <!-- Piernas -->
+      <line x1="97" y1="410" x2="90" y2="438" stroke="#2b2d42" stroke-width="15" stroke-linecap="round"/>
+      <line x1="113" y1="410" x2="122" y2="438" stroke="#2b2d42" stroke-width="15" stroke-linecap="round"/>
+      <ellipse cx="86" cy="446" rx="12" ry="5.5" fill="#e8e8f0"/>
+      <ellipse cx="126" cy="446" rx="12" ry="5.5" fill="#e8e8f0"/>
+
+      <!-- Brazo caído -->
+      <line x1="102" y1="366" x2="94" y2="402" stroke="#3d5a98" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="93" cy="408" r="5.5" fill="#ffe4d1"/>
+
+      <!-- Torso -->
+      <path d="M96 350 Q110 346 124 352 L120 416 Q104 420 88 416 Z" fill="#3d5a98"/>
+
+      <!-- Cuello -->
+      <rect x="106" y="344" width="12" height="12" fill="#ffe4d1"/>
+
+      <!-- Pelo (atrás) -->
+      <g fill="#f2cf63">
+        <circle cx="97" cy="322" r="11"/>
+        <circle cx="104" cy="307" r="12"/>
+        <circle cx="119" cy="302" r="12"/>
+        <circle cx="134" cy="306" r="11"/>
+        <circle cx="93" cy="338" r="10"/>
+        <circle cx="99" cy="351" r="8.5"/>
+      </g>
+      <g fill="#e6b94a">
+        <circle cx="108" cy="316" r="7"/>
+        <circle cx="124" cy="311" r="6"/>
+        <circle cx="100" cy="332" r="6"/>
+      </g>
+
+      <!-- Cabeza -->
+      <circle cx="118" cy="330" r="24" fill="#ffe4d1"/>
+      <circle cx="111" cy="335" r="5" fill="#f3cdb5"/>
+
+      <!-- Flequillo rizado -->
+      <g fill="#f2cf63">
+        <circle cx="126" cy="308" r="10"/>
+        <circle cx="138" cy="314" r="8"/>
+        <circle cx="114" cy="310" r="9"/>
+      </g>
+
+      <!-- Cara -->
+      <circle cx="134" cy="327" r="2.3" fill="#2b2d42"/>
+      <circle cx="134.8" cy="326.2" r="0.8" fill="#fff"/>
+      <circle cx="131" cy="337" r="4" fill="#ff9aa8" opacity="0.4"/>
+      <path d="M141 331 q5 3 0 6 z" fill="#ffe4d1"/>
+      <path d="M130 344 q4 2.5 8 0" stroke="#c97b7b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- Telescopio -->
+    <g transform="translate(140,320) rotate(-60.5)">
+      <rect x="-14" y="-5" width="14" height="10" rx="2" fill="#44445a"/>
+      <rect x="0" y="-8" width="112" height="16" rx="3" fill="#2f4f7f"/>
+      <rect x="0" y="-8" width="112" height="4" rx="2" fill="#4f78b3" opacity="0.7"/>
+      <rect x="40" y="-9.5" width="4" height="19" fill="#d4a43a"/>
+      <rect x="110" y="-12" width="60" height="24" rx="4" fill="#3a63a0"/>
+      <rect x="110" y="-12" width="60" height="5" rx="2" fill="#6c97d4" opacity="0.6"/>
+      <rect x="166" y="-13.5" width="6" height="27" rx="1.5" fill="#c9a227"/>
+      <rect x="70" y="-16" width="18" height="6" rx="2" fill="#44445a"/>
+    </g>
+
+    <!-- Brazo y mano en el telescopio -->
+    <line x1="108" y1="362" x2="153" y2="297" stroke="#3d5a98" stroke-width="13" stroke-linecap="round"/>
+    <circle cx="157" cy="291" r="6.5" fill="#ffe4d1"/>
+  </svg>
+
+  <button class="login-btn pink" id="introBtn" onclick="closeIntro()">ENTRAR 💌</button>
+</div>
 
 <div class="hearts-container" id="heartsContainer"></div>
 <div id="toast"></div>
@@ -776,6 +900,32 @@
   }
   setInterval(spawnHeart, 1800);
 
+
+  // ============================================
+  // INTRO (solo Constanza)
+  // ============================================
+  function showIntro() {
+    const el = document.getElementById('introScreen');
+    for (let i = 0; i < 70; i++) {
+      const d = document.createElement('div');
+      d.className = 'intro-dot';
+      const size = 1 + Math.random() * 2;
+      d.style.width = d.style.height = size + 'px';
+      d.style.left = Math.random() * 100 + '%';
+      d.style.top = Math.random() * 100 + '%';
+      d.style.animationDelay = (Math.random() * 3) + 's';
+      d.style.animationDuration = (2 + Math.random() * 3) + 's';
+      el.insertBefore(d, el.firstChild);
+    }
+    el.style.display = 'flex';
+  }
+
+  function closeIntro() {
+    const el = document.getElementById('introScreen');
+    el.classList.add('hide');
+    setTimeout(() => { el.style.display = 'none'; }, 850);
+  }
+
   // ============================================
   // INIT
   // ============================================
@@ -786,6 +936,7 @@
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('app').classList.add('visible');
       document.getElementById('userBadge').textContent = currentSession.display;
+      if (currentSession.role === 'viewer') showIntro();
 
       if (currentSession.role === 'writer') {
         document.getElementById('navMine').textContent = '💌 Mis mensajes';
