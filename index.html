@@ -172,6 +172,12 @@
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .cooldown-note { text-align: center; font-size: 0.85rem; color: var(--gold); margin-bottom: 1rem; font-weight: 600; display: none; }
 
+    .media-box img, .media-box video, .h-body img, .h-body video { display:block; max-width:100%; max-height:340px; border-radius:12px; margin:0.8rem auto 0; background:#000; }
+    .h-body { flex:1; min-width:0; }
+    .attach-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .attach-btn { background:rgba(255,255,255,0.06); border:1.5px dashed rgba(100,150,255,0.5); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
+    #attachName { font-size:0.82rem; color:var(--gold); word-break:break-all; }
+    #attachClear { display:none; background:none; border:none; color:var(--heart-pink); font-size:1.1rem; cursor:pointer; }
     .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
     .history-section { margin-top: 2rem; }
@@ -352,6 +358,7 @@
         <div class="board-loader" id="loader">⏳</div>
         <div class="comic-badge" id="fromBadge" style="display:none;">De: Ignacio 🕷️</div>
         <div class="msg-text" id="msgText">Cargando mensaje...</div>
+        <div class="media-box" id="msgMedia"></div>
         <div class="msg-date" id="msgDate"></div>
         <div class="ticks-row" id="ticksRow">
           <span class="tick-icon" id="tick1">✓</span>
@@ -364,6 +371,12 @@
     <div class="write-panel" id="writePanel">
       <h3>✍️ TU MENSAJE DE AMOR</h3>
       <textarea id="msgInput" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
+      <div class="attach-row">
+        <button type="button" class="attach-btn" onclick="document.getElementById('mediaInput').click()">📷 Foto o video</button>
+        <span id="attachName"></span>
+        <button type="button" id="attachClear" onclick="clearMedia()">✖</button>
+        <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none" onchange="pickMedia(this)"/>
+      </div>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()">🕷️ LANZAR MENSAJE 💌</button>
     </div>
 
@@ -398,6 +411,10 @@
   const API_KEY = '$2a$10$ULqyvo9Ld7OrgfTQAMAuVewv2GCHHWKKCWrFb8DT8gQFexyuPN.4e';
   const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
   const POLL_MS = 10000;
+
+  // Fotos y videos se suben a Cloudinary (gratis); en la base de datos solo se guarda el enlace.
+  const CLOUD_NAME    = '';  // <-- pon aquí tu Cloud name
+  const UPLOAD_PRESET = '';  // <-- pon aquí tu Upload preset (modo Unsigned)
 
   const IGNACIO = { key: 'ignacio calderon', password: 'Corte123@', role: 'writer', display: 'Ignacio 🕷️' };
   const CONSTANZA = { key: 'constanza', role: 'viewer', display: 'Constanza 💕' };
@@ -535,7 +552,9 @@
       fromBadge.style.display = 'inline-block';
       document.getElementById('msgText').textContent = last.text;
       document.getElementById('msgDate').textContent = `⏰ ${last.sentAt || ''}`;
+      setMedia(last);
     } else {
+      setMedia(null);
       fromBadge.style.display = 'none';
       document.getElementById('msgText').textContent = session.role === 'writer'
         ? 'Aún no has enviado mensajes... 🕷️' : 'Aún no hay mensajes... 🌻';
@@ -553,13 +572,18 @@
     }
 
     const history = msgs.slice(0, -1).reverse();
-    document.getElementById('historyList').innerHTML = history.length
-      ? history.map(m => `
-          <div class="history-item">
-            <span class="h-text">${escHtml(m.text)}</span>
-            <span class="h-date">${escHtml(m.sentAt || '')}</span>
-          </div>`).join('')
-      : `<p style="text-align:center;opacity:0.4;font-family:'Caveat';font-size:1.1rem;margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
+    const hEl = document.getElementById('historyList');
+    const hSig = JSON.stringify(history.map(m => m.id));
+    if (hEl.dataset.sig !== hSig) {   // solo redibuja si cambió (así no se corta un video en reproducción)
+      hEl.dataset.sig = hSig;
+      hEl.innerHTML = history.length
+        ? history.map(m => `
+            <div class="history-item">
+              <div class="h-body"><span class="h-text">${escHtml(m.text || '')}</span>${mediaHtml(m.media)}</div>
+              <span class="h-date">${escHtml(m.sentAt || '')}</span>
+            </div>`).join('')
+        : `<p style="text-align:center;opacity:0.4;font-family:'Caveat';font-size:1.1rem;margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
+    }
 
     // Mensajes de Constanza
     cCount = cMsgs.length;
@@ -598,30 +622,101 @@
   }
 
   // ============================================
-  // ENVIAR — Ignacio
+  // FOTOS / VIDEOS
+  // ============================================
+  let pendingFile = null;
+
+  function pickMedia(inp) {
+    const f = inp.files[0]; inp.value = '';
+    if (!f) return;
+    const isV = f.type.startsWith('video/'), isI = f.type.startsWith('image/');
+    if (!isV && !isI) { showToast('Elige una foto o un video 📷'); return; }
+    if (isV && f.size > 100*1024*1024) { showToast('Video muy pesado (máx 100 MB)'); return; }
+    if (isI && f.size > 10*1024*1024)  { showToast('Foto muy pesada (máx 10 MB)'); return; }
+    pendingFile = f;
+    document.getElementById('attachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
+    document.getElementById('attachClear').style.display = 'inline';
+  }
+
+  function clearMedia() {
+    pendingFile = null;
+    document.getElementById('attachName').textContent = '';
+    document.getElementById('attachClear').style.display = 'none';
+  }
+
+  function uploadMedia(file, onProgress) {
+    return new Promise((resolve, reject) => {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', UPLOAD_PRESET);
+      const x = new XMLHttpRequest();
+      x.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`);
+      x.upload.onprogress = e => { if (e.lengthComputable) onProgress(Math.round(e.loaded / e.total * 100)); };
+      x.onload = () => {
+        try {
+          const r = JSON.parse(x.responseText);
+          if (x.status >= 200 && x.status < 300 && r.secure_url)
+            resolve({ url: r.secure_url, type: r.resource_type === 'video' ? 'video' : 'image' });
+          else reject(new Error((r.error && r.error.message) || 'Error de subida'));
+        } catch (e) { reject(e); }
+      };
+      x.onerror = () => reject(new Error('Sin conexión'));
+      x.send(fd);
+    });
+  }
+
+  function mediaHtml(md) {
+    if (!md || !md.url || !/^https:\/\//.test(md.url)) return '';
+    if (md.type === 'video') {
+      const u = escHtml(md.url.replace('/upload/', '/upload/f_mp4,vc_h264,q_auto/'));
+      return `<video src="${u}" controls playsinline preload="metadata"></video>`;
+    }
+    const u = escHtml(md.url.replace('/upload/', '/upload/f_auto,q_auto/'));
+    return `<img src="${u}" alt="" loading="lazy" onclick="window.open(this.src)">`;
+  }
+
+  function setMedia(m) {
+    const box = document.getElementById('msgMedia');
+    const url = m && m.media ? m.media.url : '';
+    if (box.dataset.url === url) return;
+    box.dataset.url = url;
+    box.innerHTML = url ? mediaHtml(m.media) : '';
+  }
+
+  // ============================================
+  // ENVIAR — Ignacio (texto, foto o video)
   // ============================================
   async function sendMessage() {
     const input = document.getElementById('msgInput');
     const txt = input.value.trim();
-    if (!txt) { showToast('¡Escribe algo, héroe! 💭'); return; }
+    if (!txt && !pendingFile) { showToast('¡Escribe algo, héroe! 💭'); return; }
+    if (pendingFile && (!CLOUD_NAME || !UPLOAD_PRESET)) { showToast('Falta configurar Cloudinary 🔧'); return; }
 
     const btn = document.getElementById('sendBtn');
-    document.getElementById('loader').style.display = 'flex';
+    const btnLabel = btn.textContent;
     btn.disabled = true;
 
     try {
+      let media = null;
+      if (pendingFile) {
+        media = await uploadMedia(pendingFile, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; });
+        btn.textContent = '💾 GUARDANDO...';
+      }
       const record = await getRecord();
-      record.mensajes.push({ id: String(Date.now()), sentAt: nowLabel(), text: txt, readStatus: 'sent' });
+      const msg = { id: String(Date.now()), sentAt: nowLabel(), text: txt, readStatus: 'sent' };
+      if (media) msg.media = media;
+      record.mensajes.push(msg);
       await saveRecord(record);
 
       input.value = '';
+      clearMedia();
       showToast('¡Mensaje lanzado como telaraña! 🕷️💌');
       await render();
       setTimeout(openSms, 600);
     } catch (e) {
       showToast('Error al enviar 💔');
     } finally {
-      document.getElementById('loader').style.display = 'none';
+      btn.textContent = btnLabel;
       btn.disabled = false;
     }
   }
