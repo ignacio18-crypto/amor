@@ -178,11 +178,12 @@
     .attach-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; flex-wrap:wrap; }
     .attach-btn { background:rgba(255,255,255,0.06); border:1.5px dashed rgba(100,150,255,0.5); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
     #attachName { font-size:0.82rem; color:var(--gold); word-break:break-all; }
-    #attachClear { display:none; background:none; border:none; color:var(--heart-pink); font-size:1.1rem; cursor:pointer; }
+    #attachClear, #cAttachClear { display:none; background:none; border:none; color:var(--heart-pink); font-size:1.1rem; cursor:pointer; }
     .rec-btn { background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,77,128,0.4); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
     .rec-btn.recording { background:rgba(227,21,21,0.3); border-color:#e31515; animation:recPulse 1s ease-in-out infinite; }
     @keyframes recPulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
     .rec-time { font-size:0.82rem; color:var(--gold); font-weight:700; }
+    .audio-preview { display:none; width:100%; margin-bottom:1rem; }
     audio { display:block; width:100%; margin:0.8rem auto 0; }
     .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
@@ -508,6 +509,7 @@
         <button type="button" id="attachClear" onclick="clearMedia()">✖</button>
         <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none" onchange="pickMedia(this)"/>
       </div>
+      <audio class="audio-preview" id="audioPreview" controls></audio>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()">🕷️ LANZAR MENSAJE 💌</button>
     </div>
 
@@ -532,6 +534,7 @@
         <button type="button" id="cAttachClear" onclick="clearCMedia()">✖</button>
         <input type="file" id="cMediaInput" accept="image/*,video/*" style="display:none" onchange="pickCMedia(this)"/>
       </div>
+      <audio class="audio-preview" id="cAudioPreview" controls></audio>
       <button class="send-btn pink" id="cSendBtn" onclick="sendConstanzaMessage()">💌 ENVIAR MENSAJE 💕</button>
     </div>
 
@@ -773,6 +776,9 @@
     if (isV && f.size > 100*1024*1024) { showToast('Video muy pesado (máx 100 MB)'); return; }
     if (isI && f.size > 10*1024*1024)  { showToast('Foto muy pesada (máx 10 MB)'); return; }
     pendingFile = f; pendingFileIsAudio = false;
+    const prevA = document.getElementById('audioPreview');
+    if (prevA.src) { URL.revokeObjectURL(prevA.src); prevA.removeAttribute('src'); }
+    prevA.style.display = 'none';
     document.getElementById('attachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
     document.getElementById('attachClear').style.display = 'inline';
   }
@@ -781,6 +787,8 @@
     pendingFile = null; pendingFileIsAudio = false;
     document.getElementById('attachName').textContent = '';
     document.getElementById('attachClear').style.display = 'none';
+    const prev = document.getElementById('audioPreview');
+    if (prev.src) { URL.revokeObjectURL(prev.src); prev.removeAttribute('src'); prev.style.display = 'none'; }
   }
 
   let pendingFileC = null;
@@ -794,6 +802,9 @@
     if (isV && f.size > 100*1024*1024) { showToast('Video muy pesado (máx 100 MB)'); return; }
     if (isI && f.size > 10*1024*1024)  { showToast('Foto muy pesada (máx 10 MB)'); return; }
     pendingFileC = f; pendingFileCIsAudio = false;
+    const prevAC = document.getElementById('cAudioPreview');
+    if (prevAC.src) { URL.revokeObjectURL(prevAC.src); prevAC.removeAttribute('src'); }
+    prevAC.style.display = 'none';
     document.getElementById('cAttachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
     document.getElementById('cAttachClear').style.display = 'inline';
   }
@@ -802,6 +813,8 @@
     pendingFileC = null; pendingFileCIsAudio = false;
     document.getElementById('cAttachName').textContent = '';
     document.getElementById('cAttachClear').style.display = 'none';
+    const prevC = document.getElementById('cAudioPreview');
+    if (prevC.src) { URL.revokeObjectURL(prevC.src); prevC.removeAttribute('src'); prevC.style.display = 'none'; }
   }
 
   function uploadMedia(file, onProgress, isAudio) {
@@ -875,14 +888,19 @@
       const ext = (mediaRecorder.mimeType || '').includes('mp4') ? 'm4a' : 'webm';
       const file = new File([blob], `nota_de_voz_${Date.now()}.${ext}`, { type: blob.type });
       const dur = recSeconds;
+      const objUrl = URL.createObjectURL(blob);
       if (recSide === 'mine') {
         pendingFile = file; pendingFileIsAudio = true;
         document.getElementById('attachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
         document.getElementById('attachClear').style.display = 'inline';
+        const prev = document.getElementById('audioPreview');
+        prev.src = objUrl; prev.style.display = 'block';
       } else {
         pendingFileC = file; pendingFileCIsAudio = true;
         document.getElementById('cAttachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
         document.getElementById('cAttachClear').style.display = 'inline';
+        const prevC = document.getElementById('cAudioPreview');
+        prevC.src = objUrl; prevC.style.display = 'block';
       }
       setRecUI(recSide, false);
     };
