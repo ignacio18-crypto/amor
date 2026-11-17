@@ -174,6 +174,7 @@
 
     .media-box img, .media-box video, .h-body img, .h-body video { display:block; max-width:100%; max-height:340px; border-radius:12px; margin:0.8rem auto 0; background:#000; }
     .h-body { flex:1; min-width:0; }
+    .h-seen { margin-top:0.5rem; font-size:0.75rem; color:#06b6d4; }
     .attach-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:1rem; flex-wrap:wrap; }
     .attach-btn { background:rgba(255,255,255,0.06); border:1.5px dashed rgba(100,150,255,0.5); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
     #attachName { font-size:0.82rem; color:var(--gold); word-break:break-all; }
@@ -612,7 +613,7 @@
   // ============================================
   // TICKS
   // ============================================
-  function renderTicks(status) {
+  function renderTicks(status, readAt) {
     const row = document.getElementById('ticksRow');
     const t1  = document.getElementById('tick1');
     const t2  = document.getElementById('tick2');
@@ -620,7 +621,7 @@
     row.style.display = 'flex';
     if (status === 'read') {
       t1.style.color = '#06b6d4'; t2.style.color = '#06b6d4';
-      t2.style.display = 'inline'; lbl.textContent = 'Visto 💕'; lbl.style.color = '#06b6d4';
+      t2.style.display = 'inline'; lbl.textContent = 'Visto 💕' + (readAt ? ' · ' + readAt : ''); lbl.style.color = '#06b6d4';
     } else if (status === 'delivered') {
       t1.style.color = '#ffd700'; t2.style.color = '#ffd700';
       t2.style.display = 'inline'; lbl.textContent = 'Entregado'; lbl.style.color = '#ffd700';
@@ -685,7 +686,7 @@
 
     if (session.role === 'writer') {
       document.getElementById('writePanel').style.display = 'block';
-      if (last) renderTicks(last.readStatus || 'sent');
+      if (last) renderTicks(last.readStatus || 'sent', last.readAt);
       else document.getElementById('ticksRow').style.display = 'none';
     } else {
       document.getElementById('readonlyBanner').style.display = last ? 'none' : 'block';
@@ -695,13 +696,13 @@
 
     const history = msgs.slice(0, -1).reverse();
     const hEl = document.getElementById('historyList');
-    const hSig = JSON.stringify(history.map(m => m.id));
+    const hSig = JSON.stringify(history.map(m => [m.id, m.readAt || m.readStatus || '']));
     if (hEl.dataset.sig !== hSig) {   // solo redibuja si cambió (así no se corta un video en reproducción)
       hEl.dataset.sig = hSig;
       hEl.innerHTML = history.length
         ? history.map(m => `
             <div class="history-item">
-              <div class="h-body"><span class="h-text">${escHtml(m.text || '')}</span>${mediaHtml(m.media)}</div>
+              <div class="h-body"><span class="h-text">${escHtml(m.text || '')}</span>${mediaHtml(m.media)}${session.role === 'writer' && m.readStatus === 'read' ? `<div class="h-seen">✓✓ Visto${m.readAt ? ' · ' + escHtml(m.readAt) : ''}</div>` : ''}</div>
               <span class="h-date">${escHtml(m.sentAt || '')}</span>
             </div>`).join('')
         : `<p style="text-align:center;opacity:0.4;font-family:'Caveat';font-size:1.1rem;margin-top:1rem;">Aún no hay mensajes pasados 🌻</p>`;
@@ -729,7 +730,7 @@
     try {
       const rec = await getRecord();
       let changed = false;
-      rec.mensajes.forEach(m => { if (m.readStatus !== 'read') { m.readStatus = 'read'; changed = true; } });
+      rec.mensajes.forEach(m => { if (m.readStatus !== 'read') { m.readStatus = 'read'; m.readAt = nowLabel(); changed = true; } });
       if (changed) await saveRecord(rec);
     } catch(e) {}
   }
