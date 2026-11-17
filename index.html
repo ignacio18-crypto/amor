@@ -179,6 +179,11 @@
     .attach-btn { background:rgba(255,255,255,0.06); border:1.5px dashed rgba(100,150,255,0.5); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
     #attachName { font-size:0.82rem; color:var(--gold); word-break:break-all; }
     #attachClear { display:none; background:none; border:none; color:var(--heart-pink); font-size:1.1rem; cursor:pointer; }
+    .rec-btn { background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,77,128,0.4); color:#fff; border-radius:12px; padding:0.6rem 1rem; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer; }
+    .rec-btn.recording { background:rgba(227,21,21,0.3); border-color:#e31515; animation:recPulse 1s ease-in-out infinite; }
+    @keyframes recPulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
+    .rec-time { font-size:0.82rem; color:var(--gold); font-weight:700; }
+    audio { display:block; width:100%; margin:0.8rem auto 0; }
     .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
     .history-section { margin-top: 2rem; }
@@ -497,6 +502,8 @@
       <textarea id="msgInput" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
       <div class="attach-row">
         <button type="button" class="attach-btn" onclick="document.getElementById('mediaInput').click()">📷 Foto o video</button>
+        <button type="button" class="rec-btn" id="recBtn" onclick="toggleRecord('mine')">🎤 Audio</button>
+        <span class="rec-time" id="recTime"></span>
         <span id="attachName"></span>
         <button type="button" id="attachClear" onclick="clearMedia()">✖</button>
         <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none" onchange="pickMedia(this)"/>
@@ -517,6 +524,14 @@
     <div class="write-panel pink" id="cWritePanel">
       <h3>💕 ESCRÍBELE A TU HÉROE</h3>
       <textarea id="cMsgInput" maxlength="1000" placeholder="Cuéntale lo que sientes..."></textarea>
+      <div class="attach-row">
+        <button type="button" class="attach-btn" onclick="document.getElementById('cMediaInput').click()">📷 Foto o video</button>
+        <button type="button" class="rec-btn" id="cRecBtn" onclick="toggleRecord('c')">🎤 Audio</button>
+        <span class="rec-time" id="cRecTime"></span>
+        <span id="cAttachName"></span>
+        <button type="button" id="cAttachClear" onclick="clearCMedia()">✖</button>
+        <input type="file" id="cMediaInput" accept="image/*,video/*" style="display:none" onchange="pickCMedia(this)"/>
+      </div>
       <button class="send-btn pink" id="cSendBtn" onclick="sendConstanzaMessage()">💌 ENVIAR MENSAJE 💕</button>
     </div>
 
@@ -712,7 +727,7 @@
     cCount = cMsgs.length;
     const cHtml = cMsgs.slice().reverse().map(m => `
       <div class="history-item pink">
-        <span class="h-text">${escHtml(m.text)}</span>
+        <div class="h-body"><span class="h-text">${escHtml(m.text || '')}</span>${mediaHtml(m.media)}</div>
         <span class="h-date">${escHtml(m.sentAt || '')}</span>
       </div>`).join('');
     const empty = session.role === 'writer'
@@ -748,6 +763,7 @@
   // FOTOS / VIDEOS
   // ============================================
   let pendingFile = null;
+  let pendingFileIsAudio = false;
 
   function pickMedia(inp) {
     const f = inp.files[0]; inp.value = '';
@@ -756,18 +772,39 @@
     if (!isV && !isI) { showToast('Elige una foto o un video 📷'); return; }
     if (isV && f.size > 100*1024*1024) { showToast('Video muy pesado (máx 100 MB)'); return; }
     if (isI && f.size > 10*1024*1024)  { showToast('Foto muy pesada (máx 10 MB)'); return; }
-    pendingFile = f;
+    pendingFile = f; pendingFileIsAudio = false;
     document.getElementById('attachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
     document.getElementById('attachClear').style.display = 'inline';
   }
 
   function clearMedia() {
-    pendingFile = null;
+    pendingFile = null; pendingFileIsAudio = false;
     document.getElementById('attachName').textContent = '';
     document.getElementById('attachClear').style.display = 'none';
   }
 
-  function uploadMedia(file, onProgress) {
+  let pendingFileC = null;
+  let pendingFileCIsAudio = false;
+
+  function pickCMedia(inp) {
+    const f = inp.files[0]; inp.value = '';
+    if (!f) return;
+    const isV = f.type.startsWith('video/'), isI = f.type.startsWith('image/');
+    if (!isV && !isI) { showToast('Elige una foto o un video 📷'); return; }
+    if (isV && f.size > 100*1024*1024) { showToast('Video muy pesado (máx 100 MB)'); return; }
+    if (isI && f.size > 10*1024*1024)  { showToast('Foto muy pesada (máx 10 MB)'); return; }
+    pendingFileC = f; pendingFileCIsAudio = false;
+    document.getElementById('cAttachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
+    document.getElementById('cAttachClear').style.display = 'inline';
+  }
+
+  function clearCMedia() {
+    pendingFileC = null; pendingFileCIsAudio = false;
+    document.getElementById('cAttachName').textContent = '';
+    document.getElementById('cAttachClear').style.display = 'none';
+  }
+
+  function uploadMedia(file, onProgress, isAudio) {
     return new Promise((resolve, reject) => {
       const fd = new FormData();
       fd.append('file', file);
@@ -779,7 +816,7 @@
         try {
           const r = JSON.parse(x.responseText);
           if (x.status >= 200 && x.status < 300 && r.secure_url)
-            resolve({ url: r.secure_url, type: r.resource_type === 'video' ? 'video' : 'image' });
+            resolve({ url: r.secure_url, type: isAudio ? 'audio' : (r.resource_type === 'video' ? 'video' : 'image') });
           else reject(new Error((r.error && r.error.message) || 'Error de subida'));
         } catch (e) { reject(e); }
       };
@@ -790,6 +827,9 @@
 
   function mediaHtml(md) {
     if (!md || !md.url || !/^https:\/\//.test(md.url)) return '';
+    if (md.type === 'audio') {
+      return `<audio src="${escHtml(md.url)}" controls preload="metadata"></audio>`;
+    }
     if (md.type === 'video') {
       const u = escHtml(md.url.replace('/upload/', '/upload/f_mp4,vc_h264,q_auto/'));
       return `<video src="${u}" controls playsinline preload="metadata"></video>`;
@@ -804,6 +844,68 @@
     if (box.dataset.url === url) return;
     box.dataset.url = url;
     box.innerHTML = url ? mediaHtml(m.media) : '';
+  }
+
+  // ============================================
+  // GRABAR AUDIO
+  // ============================================
+  let mediaRecorder = null, recChunks = [], recStream = null, recTimer = null, recSeconds = 0, recSide = null;
+
+  function fmtTime(s) {
+    return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+  }
+
+  async function toggleRecord(side) {
+    if (mediaRecorder && mediaRecorder.state === 'recording') { stopRecord(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder) { showToast('Tu navegador no permite grabar audio 🎤'); return; }
+    try {
+      recStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (e) { showToast('No se pudo acceder al micrófono 🎤'); return; }
+
+    recSide = side;
+    recChunks = [];
+    const mime = MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4'
+               : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+    mediaRecorder = mime ? new MediaRecorder(recStream, { mimeType: mime }) : new MediaRecorder(recStream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      recStream.getTracks().forEach(t => t.stop());
+      clearInterval(recTimer);
+      const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      const ext = (mediaRecorder.mimeType || '').includes('mp4') ? 'm4a' : 'webm';
+      const file = new File([blob], `nota_de_voz_${Date.now()}.${ext}`, { type: blob.type });
+      const dur = recSeconds;
+      if (recSide === 'mine') {
+        pendingFile = file; pendingFileIsAudio = true;
+        document.getElementById('attachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
+        document.getElementById('attachClear').style.display = 'inline';
+      } else {
+        pendingFileC = file; pendingFileCIsAudio = true;
+        document.getElementById('cAttachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
+        document.getElementById('cAttachClear').style.display = 'inline';
+      }
+      setRecUI(recSide, false);
+    };
+    mediaRecorder.start();
+    recSeconds = 0;
+    setRecUI(side, true);
+    recTimer = setInterval(() => {
+      recSeconds++;
+      document.getElementById(side === 'mine' ? 'recTime' : 'cRecTime').textContent = fmtTime(recSeconds);
+      if (recSeconds >= 120) stopRecord(); // tope de 2 minutos
+    }, 1000);
+  }
+
+  function stopRecord() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+  }
+
+  function setRecUI(side, active) {
+    const btn = document.getElementById(side === 'mine' ? 'recBtn' : 'cRecBtn');
+    const time = document.getElementById(side === 'mine' ? 'recTime' : 'cRecTime');
+    btn.classList.toggle('recording', active);
+    btn.textContent = active ? '⏹️ Detener' : '🎤 Audio';
+    if (!active) time.textContent = '';
   }
 
   // ============================================
@@ -822,7 +924,7 @@
     try {
       let media = null;
       if (pendingFile) {
-        media = await uploadMedia(pendingFile, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; });
+        media = await uploadMedia(pendingFile, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; }, pendingFileIsAudio);
         btn.textContent = '💾 GUARDANDO...';
       }
       const record = await getRecord();
@@ -851,21 +953,32 @@
     const input = document.getElementById('cMsgInput');
     const btn = document.getElementById('cSendBtn');
     const txt = input.value.trim();
-    if (!txt) { showToast('Escribe algo primero 💭'); return; }
+    if (!txt && !pendingFileC) { showToast('Escribe algo primero 💭'); return; }
+    if (pendingFileC && (!CLOUD_NAME || !UPLOAD_PRESET)) { showToast('Falta configurar Cloudinary 🔧'); return; }
 
+    const btnLabel = btn.textContent;
     btn.disabled = true;
     try {
+      let media = null;
+      if (pendingFileC) {
+        media = await uploadMedia(pendingFileC, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; }, pendingFileCIsAudio);
+        btn.textContent = '💾 GUARDANDO...';
+      }
       const record = await getRecord();
       const list = record.mensajesConstanza;
-      list.push({ id: String(Date.now()), ts: Date.now(), sentAt: nowLabel(), text: txt });
+      const msg = { id: String(Date.now()), ts: Date.now(), sentAt: nowLabel(), text: txt };
+      if (media) msg.media = media;
+      list.push(msg);
       await saveRecord(record);
 
       input.value = '';
+      clearCMedia();
       showToast('¡Mensaje enviado! 💌💕');
       await render();
     } catch (e) {
       showToast('Error al enviar 💔');
     } finally {
+      btn.textContent = btnLabel;
       btn.disabled = false;
     }
   }
