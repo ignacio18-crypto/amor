@@ -185,6 +185,32 @@
     @keyframes recPulse { 0%,100% { opacity:1; } 50% { opacity:0.55; } }
     .rec-time { font-size:0.82rem; color:var(--gold); font-weight:700; }
     .audio-preview { display:none; width:100%; margin-bottom:1rem; }
+
+    /* COMPOSER ESTILO WHATSAPP */
+    .write-panel { position: relative; padding-bottom: 1.4rem; }
+    .attach-preview { display: none; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+    .attach-preview span#attachName, .attach-preview span#cAttachName { font-size: 0.82rem; color: var(--gold); word-break: break-all; }
+    .attach-preview button { background: none; border: none; color: var(--heart-pink); font-size: 1.1rem; cursor: pointer; }
+    #composer, #cComposer { display: flex; align-items: flex-end; gap: 0.6rem; position: relative; }
+    .field { flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(200,0,0,0.25); border-radius: 26px; display: flex; align-items: flex-end; min-height: 48px; padding: 0 4px; }
+    .write-panel.pink .field { border-color: rgba(255,77,128,0.3); }
+    .field textarea { flex: 1; border: 0; outline: 0; background: none; color: var(--text); font-family: 'Caveat', cursive; font-size: 1.25rem; line-height: 1.3; resize: none; max-height: 110px; padding: 0.7rem 0.3rem; }
+    .field textarea::placeholder { color: rgba(255,255,255,0.25); }
+    .ib { border: 0; background: none; color: var(--gold); width: 38px; height: 46px; display: grid; place-items: center; font-size: 1.3rem; cursor: pointer; flex: none; }
+    #act, #cAct { width: 48px; height: 48px; border-radius: 50%; border: none; background: linear-gradient(135deg, #cc0000, #ff2020); color: #fff; display: grid; place-items: center; flex: none; cursor: pointer; touch-action: none; user-select: none; font-size: 1.3rem; box-shadow: 0 5px 16px rgba(200,0,0,0.4); transition: transform .15s; }
+    .write-panel.pink #cAct { background: linear-gradient(135deg, #d6246e, #ff4d80); box-shadow: 0 5px 16px rgba(255,77,128,0.4); }
+    #act.rec, #cAct.rec { transform: scale(1.4); }
+    .pop { position: absolute; left: 0; right: 0; bottom: 58px; background: rgba(12,0,30,0.97); border: 1px solid rgba(200,0,0,0.3); border-radius: 18px; box-shadow: 0 0 24px rgba(200,0,0,0.25); z-index: 5; }
+    #menu, #cMenu { display: grid; grid-template-columns: repeat(2,1fr); padding: 1rem 0.6rem; }
+    #menu button, #cMenu button { border: 0; background: none; color: var(--text); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
+    #menu .c, #cMenu .c { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 1.3rem; }
+    .c.cam { background: #c2185b; } .c.gal { background: #e03a2a; }
+    .emo { display: grid; grid-template-columns: repeat(8,1fr); padding: 0.6rem; font-size: 1.4rem; text-align: center; max-height: 220px; overflow-y: auto; }
+    .emo span { cursor: pointer; padding: 0.2rem 0; }
+    #recbar, #cRecbar { position: absolute; left: 0; right: 56px; bottom: 0; height: 48px; border-radius: 26px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(200,0,0,0.25); display: flex; align-items: center; gap: 0.6rem; padding: 0 1rem; }
+    #recbar .dot, #cRecbar .dot { width: 9px; height: 9px; border-radius: 50%; background: #e31515; animation: recPulse 1s infinite; }
+    #recbar .sl, #cRecbar .sl { margin-left: auto; color: var(--text-dim); font-size: 0.78rem; }
+    #lock, #cLock { position: absolute; right: 0; bottom: 56px; width: 38px; height: 66px; border-radius: 18px; background: rgba(12,0,30,0.95); border: 1px solid rgba(200,0,0,0.3); color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; font-size: 0.78rem; }
     audio { display:block; width:100%; margin:0.8rem auto 0; }
         .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
@@ -495,32 +521,60 @@
 
   <!-- Entrada de Ignacio -->
   <div class="write-panel" id="writePanel">
-    <textarea id="msgInput" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
-    <div class="attach-row">
-      <button type="button" class="attach-btn" onclick="document.getElementById('mediaInput').click()">📷 Foto o video</button>
-      <button type="button" class="rec-btn" id="recBtn" onclick="toggleRecord('mine')">🎤 Audio</button>
-      <span class="rec-time" id="recTime"></span>
+    <div class="attach-preview" id="attachPreview">
       <span id="attachName"></span>
       <button type="button" id="attachClear" onclick="clearMedia()">✖</button>
-      <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none" onchange="pickMedia(this)"/>
     </div>
     <audio class="audio-preview" id="audioPreview" controls></audio>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">🕷️ LANZAR MENSAJE 💌</button>
+    <div id="menu" class="pop hide">
+      <button type="button" data-k="cam"><span class="c cam">📷</span>Cámara</button>
+      <button type="button" data-k="gal"><span class="c gal">🖼️</span>Galería</button>
+    </div>
+    <div id="emo" class="pop emo hide"></div>
+    <div id="composer">
+      <div class="field" id="field">
+        <button type="button" class="ib" id="emoBtn">😊</button>
+        <textarea id="msgInput" rows="1" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
+        <button type="button" class="ib" id="clip">📎</button>
+      </div>
+      <button type="button" id="act" aria-label="Mensaje de voz">
+        <span id="icMic">🎤</span>
+        <span id="icSend" class="hide">➤</span>
+      </button>
+      <div id="recbar" class="hide"><span class="dot"></span><b id="timer">0:00</b><span class="sl" id="sl">‹ Desliza para cancelar</span></div>
+    </div>
+    <div id="lock" class="hide">🔒<br>↑</div>
+    <input type="file" id="mediaInput" accept="image/*,video/*" style="display:none" onchange="pickMedia(this)"/>
+    <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none" onchange="pickMedia(this)"/>
   </div>
 
   <!-- Entrada de Constanza -->
   <div class="write-panel pink" id="cWritePanel">
-    <textarea id="cMsgInput" maxlength="1000" placeholder="Cuéntale lo que sientes..."></textarea>
-    <div class="attach-row">
-      <button type="button" class="attach-btn" onclick="document.getElementById('cMediaInput').click()">📷 Foto o video</button>
-      <button type="button" class="rec-btn" id="cRecBtn" onclick="toggleRecord('c')">🎤 Audio</button>
-      <span class="rec-time" id="cRecTime"></span>
+    <div class="attach-preview" id="cAttachPreview">
       <span id="cAttachName"></span>
       <button type="button" id="cAttachClear" onclick="clearCMedia()">✖</button>
-      <input type="file" id="cMediaInput" accept="image/*,video/*" style="display:none" onchange="pickCMedia(this)"/>
     </div>
     <audio class="audio-preview" id="cAudioPreview" controls></audio>
-    <button class="send-btn pink" id="cSendBtn" onclick="sendConstanzaMessage()">💌 ENVIAR MENSAJE 💕</button>
+    <div id="cMenu" class="pop hide">
+      <button type="button" data-k="cam"><span class="c cam">📷</span>Cámara</button>
+      <button type="button" data-k="gal"><span class="c gal">🖼️</span>Galería</button>
+    </div>
+    <div id="cEmo" class="pop emo hide"></div>
+    <div id="cComposer">
+      <div class="field" id="cField">
+        <button type="button" class="ib" id="cEmoBtn">😊</button>
+        <textarea id="cMsgInput" rows="1" maxlength="1000" placeholder="Cuéntale lo que sientes..."></textarea>
+        <button type="button" class="ib" id="cClip">📎</button>
+      </div>
+      <button type="button" id="cAct" aria-label="Mensaje de voz">
+        <span id="cIcMic">🎤</span>
+        <span id="cIcSend" class="hide">➤</span>
+      </button>
+      <div id="cRecbar" class="hide"><span class="dot"></span><b id="cTimer">0:00</b><span class="sl" id="cSl">‹ Desliza para cancelar</span></div>
+    </div>
+    <div id="cLock" class="hide">🔒<br>↑</div>
+    <input type="file" id="cMediaInput" accept="image/*,video/*" style="display:none" onchange="pickCMedia(this)"/>
+    <input type="file" id="cCamInput" accept="image/*" capture="environment" style="display:none" onchange="pickCMedia(this)"/>
   </div>
 </div>
 
@@ -691,15 +745,17 @@
     if (prevA.src) { URL.revokeObjectURL(prevA.src); prevA.removeAttribute('src'); }
     prevA.style.display = 'none';
     document.getElementById('attachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
-    document.getElementById('attachClear').style.display = 'inline';
+    document.getElementById('attachPreview').style.display = 'flex';
+    updateAct('mine');
   }
 
   function clearMedia() {
     pendingFile = null; pendingFileIsAudio = false;
     document.getElementById('attachName').textContent = '';
-    document.getElementById('attachClear').style.display = 'none';
+    document.getElementById('attachPreview').style.display = 'none';
     const prev = document.getElementById('audioPreview');
     if (prev.src) { URL.revokeObjectURL(prev.src); prev.removeAttribute('src'); prev.style.display = 'none'; }
+    updateAct('mine');
   }
 
   let pendingFileC = null;
@@ -717,15 +773,17 @@
     if (prevAC.src) { URL.revokeObjectURL(prevAC.src); prevAC.removeAttribute('src'); }
     prevAC.style.display = 'none';
     document.getElementById('cAttachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
-    document.getElementById('cAttachClear').style.display = 'inline';
+    document.getElementById('cAttachPreview').style.display = 'flex';
+    updateAct('c');
   }
 
   function clearCMedia() {
     pendingFileC = null; pendingFileCIsAudio = false;
     document.getElementById('cAttachName').textContent = '';
-    document.getElementById('cAttachClear').style.display = 'none';
+    document.getElementById('cAttachPreview').style.display = 'none';
     const prevC = document.getElementById('cAudioPreview');
     if (prevC.src) { URL.revokeObjectURL(prevC.src); prevC.removeAttribute('src'); prevC.style.display = 'none'; }
+    updateAct('c');
   }
 
   function uploadMedia(file, onProgress, isAudio) {
@@ -763,70 +821,164 @@
   }
 
   // ============================================
-  // GRABAR AUDIO
+  // GRABAR AUDIO (mantener presionado, deslizar para cancelar/fijar)
   // ============================================
   let mediaRecorder = null, recChunks = [], recStream = null, recTimer = null, recSeconds = 0, recSide = null;
+  let recStartX = 0, recStartY = 0, recLocked = false, recCancelled = false, recPressing = false;
 
   function fmtTime(s) {
     return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
   }
 
-  async function toggleRecord(side) {
-    if (mediaRecorder && mediaRecorder.state === 'recording') { stopRecord(); return; }
-    if (!navigator.mediaDevices || !window.MediaRecorder) { showToast('Tu navegador no permite grabar audio 🎤'); return; }
-    try {
-      recStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    } catch (e) { showToast('No se pudo acceder al micrófono 🎤'); return; }
+  function els(side) {
+    const mine = side === 'mine';
+    return {
+      field: document.getElementById(mine ? 'field' : 'cField'),
+      act: document.getElementById(mine ? 'act' : 'cAct'),
+      recbar: document.getElementById(mine ? 'recbar' : 'cRecbar'),
+      lock: document.getElementById(mine ? 'lock' : 'cLock'),
+      timer: document.getElementById(mine ? 'timer' : 'cTimer'),
+      sl: document.getElementById(mine ? 'sl' : 'cSl'),
+      icMic: document.getElementById(mine ? 'icMic' : 'cIcMic'),
+      icSend: document.getElementById(mine ? 'icSend' : 'cIcSend'),
+      textarea: document.getElementById(mine ? 'msgInput' : 'cMsgInput')
+    };
+  }
 
-    recSide = side;
-    recChunks = [];
+  async function startRec(side, e) {
+    recStartX = e.clientX; recStartY = e.clientY; recLocked = false; recCancelled = false;
+    if (!navigator.mediaDevices || !window.MediaRecorder) { showToast('Tu navegador no permite grabar audio 🎤'); recPressing = false; return; }
+    try { recStream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    catch (e2) { recPressing = false; showToast('No se pudo acceder al micrófono 🎤'); return; }
+    if (!recPressing) { recStream.getTracks().forEach(t => t.stop()); return; }
+
+    recSide = side; recChunks = [];
     const mime = MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4'
                : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
     mediaRecorder = mime ? new MediaRecorder(recStream, { mimeType: mime }) : new MediaRecorder(recStream);
-    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
+    mediaRecorder.ondataavailable = ev => { if (ev.data.size > 0) recChunks.push(ev.data); };
     mediaRecorder.onstop = () => {
       recStream.getTracks().forEach(t => t.stop());
       clearInterval(recTimer);
-      const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-      const ext = (mediaRecorder.mimeType || '').includes('mp4') ? 'm4a' : 'webm';
-      const file = new File([blob], `nota_de_voz_${Date.now()}.${ext}`, { type: blob.type });
       const dur = recSeconds;
-      const objUrl = URL.createObjectURL(blob);
-      if (recSide === 'mine') {
-        pendingFile = file; pendingFileIsAudio = true;
-        document.getElementById('attachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
-        document.getElementById('attachClear').style.display = 'inline';
-        const prev = document.getElementById('audioPreview');
-        prev.src = objUrl; prev.style.display = 'block';
-      } else {
-        pendingFileC = file; pendingFileCIsAudio = true;
-        document.getElementById('cAttachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
-        document.getElementById('cAttachClear').style.display = 'inline';
-        const prevC = document.getElementById('cAudioPreview');
-        prevC.src = objUrl; prevC.style.display = 'block';
+      const E = els(recSide);
+      E.field.classList.remove('hide'); E.recbar.classList.add('hide'); E.lock.classList.add('hide');
+      E.act.classList.remove('rec'); E.timer.textContent = '0:00'; E.sl.textContent = '‹ Desliza para cancelar';
+      if (!recCancelled && dur > 0.6) {
+        const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+        const ext = (mediaRecorder.mimeType || '').includes('mp4') ? 'm4a' : 'webm';
+        const file = new File([blob], `nota_de_voz_${Date.now()}.${ext}`, { type: blob.type });
+        const objUrl = URL.createObjectURL(blob);
+        if (recSide === 'mine') {
+          pendingFile = file; pendingFileIsAudio = true;
+          document.getElementById('attachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
+          document.getElementById('attachPreview').style.display = 'flex';
+          const prev = document.getElementById('audioPreview'); prev.src = objUrl; prev.style.display = 'block';
+        } else {
+          pendingFileC = file; pendingFileCIsAudio = true;
+          document.getElementById('cAttachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
+          document.getElementById('cAttachPreview').style.display = 'flex';
+          const prevC = document.getElementById('cAudioPreview'); prevC.src = objUrl; prevC.style.display = 'block';
+        }
       }
-      setRecUI(recSide, false);
+      updateAct(recSide);
     };
     mediaRecorder.start();
     recSeconds = 0;
-    setRecUI(side, true);
+    const E = els(side);
+    E.field.classList.add('hide'); E.recbar.classList.remove('hide'); E.lock.classList.remove('hide'); E.act.classList.add('rec');
     recTimer = setInterval(() => {
       recSeconds++;
-      document.getElementById(side === 'mine' ? 'recTime' : 'cRecTime').textContent = fmtTime(recSeconds);
-      if (recSeconds >= 120) stopRecord(); // tope de 2 minutos
+      E.timer.textContent = fmtTime(recSeconds);
+      if (recSeconds >= 120) endRec(side, false); // tope de 2 minutos
     }, 1000);
   }
 
-  function stopRecord() {
-    if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+  function endRec(side, cancel) {
+    clearInterval(recTimer);
+    recCancelled = cancel; recPressing = false; recLocked = false;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    else { const E = els(side); E.field.classList.remove('hide'); E.recbar.classList.add('hide'); E.lock.classList.add('hide'); E.act.classList.remove('rec'); }
   }
 
-  function setRecUI(side, active) {
-    const btn = document.getElementById(side === 'mine' ? 'recBtn' : 'cRecBtn');
-    const time = document.getElementById(side === 'mine' ? 'recTime' : 'cRecTime');
-    btn.classList.toggle('recording', active);
-    btn.textContent = active ? '⏹️ Detener' : '🎤 Audio';
-    if (!active) time.textContent = '';
+  function bindHold(side) {
+    const E = els(side);
+    E.act.addEventListener('pointerdown', e => {
+      const hasText = E.textarea.value.trim().length > 0;
+      const hasAttach = side === 'mine' ? !!pendingFile : !!pendingFileC;
+      if (hasText || hasAttach) { side === 'mine' ? sendMessage() : sendConstanzaMessage(); return; }
+      if (recLocked && mediaRecorder) { endRec(side, false); return; }
+      recPressing = true; E.act.setPointerCapture(e.pointerId); startRec(side, e);
+    });
+    E.act.addEventListener('pointermove', e => {
+      if (!recPressing || !mediaRecorder || recLocked) return;
+      const dx = e.clientX - recStartX, dy = e.clientY - recStartY;
+      if (dx < -90) { recPressing = false; endRec(side, true); }
+      else if (dy < -70) {
+        recLocked = true; recPressing = false;
+        E.lock.classList.add('hide'); E.act.classList.remove('rec');
+        E.sl.innerHTML = '<button type="button" style="background:none;border:0;color:var(--heart-pink);font-size:1.1rem;" onclick="endRec(\'' + side + '\', true)">🗑️</button>';
+      }
+    });
+    E.act.addEventListener('pointerup', () => { if (recPressing) { recPressing = false; if (mediaRecorder) endRec(side, false); } });
+    E.act.addEventListener('pointercancel', () => { if (recPressing) { recPressing = false; if (mediaRecorder) endRec(side, true); } });
+    E.act.addEventListener('contextmenu', e => e.preventDefault());
+  }
+
+  function updateAct(side) {
+    const E = els(side);
+    const hasText = E.textarea.value.trim().length > 0;
+    const hasAttach = side === 'mine' ? !!pendingFile : !!pendingFileC;
+    const showSend = hasText || hasAttach;
+    E.icMic.classList.toggle('hide', showSend);
+    E.icSend.classList.toggle('hide', !showSend);
+    E.act.setAttribute('aria-label', showSend ? 'Enviar' : 'Mensaje de voz');
+  }
+
+  // ============================================
+  // EMOJIS Y MENÚ DE ADJUNTAR
+  // ============================================
+  const EMOJIS = ['🕷️','🕸️','❤️','💕','😍','🥰','😘','😂','😢','😡','🤔','😎','👍','🙏','🔥','✨','💔','🌹','🎶','😴','🤗','💪','🙈','🎉'];
+
+  function setupComposer(side) {
+    const p = side === 'mine' ? '' : 'c';
+    const textarea = document.getElementById(side === 'mine' ? 'msgInput' : 'cMsgInput');
+    const emoBtn = document.getElementById(side === 'mine' ? 'emoBtn' : 'cEmoBtn');
+    const emoPanel = document.getElementById(side === 'mine' ? 'emo' : 'cEmo');
+    const clipBtn = document.getElementById(side === 'mine' ? 'clip' : 'cClip');
+    const menuPanel = document.getElementById(side === 'mine' ? 'menu' : 'cMenu');
+    const mediaInput = document.getElementById(side === 'mine' ? 'mediaInput' : 'cMediaInput');
+    const camInput = document.getElementById(side === 'mine' ? 'camInput' : 'cCamInput');
+
+    EMOJIS.forEach(em => {
+      const s = document.createElement('span');
+      s.textContent = em;
+      s.onclick = () => { textarea.value += em; textarea.dispatchEvent(new Event('input')); };
+      emoPanel.appendChild(s);
+    });
+
+    function closePop() { menuPanel.classList.add('hide'); emoPanel.classList.add('hide'); }
+    emoBtn.onclick = () => { const o = emoPanel.classList.contains('hide'); closePop(); if (o) emoPanel.classList.remove('hide'); };
+    clipBtn.onclick = () => { const o = menuPanel.classList.contains('hide'); closePop(); if (o) menuPanel.classList.remove('hide'); };
+    menuPanel.onclick = e => {
+      const b = e.target.closest('button'); if (!b) return;
+      closePop();
+      if (b.dataset.k === 'cam') camInput.click(); else mediaInput.click();
+    };
+    document.getElementById('chatFeed').addEventListener('pointerdown', closePop);
+
+    textarea.addEventListener('input', () => {
+      textarea.style.height = 'auto'; textarea.style.height = textarea.scrollHeight + 'px';
+      updateAct(side);
+    });
+    textarea.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey && !matchMedia('(pointer:coarse)').matches) {
+        e.preventDefault();
+        side === 'mine' ? sendMessage() : sendConstanzaMessage();
+      }
+    });
+
+    bindHold(side);
   }
 
   // ============================================
@@ -834,19 +986,17 @@
   // ============================================
   async function sendMessage() {
     const input = document.getElementById('msgInput');
+    const act = document.getElementById('act');
     const txt = input.value.trim();
-    if (!txt && !pendingFile) { showToast('¡Escribe algo, héroe! 💭'); return; }
+    if (!txt && !pendingFile) return;
     if (pendingFile && (!CLOUD_NAME || !UPLOAD_PRESET)) { showToast('Falta configurar Cloudinary 🔧'); return; }
 
-    const btn = document.getElementById('sendBtn');
-    const btnLabel = btn.textContent;
-    btn.disabled = true;
-
+    act.style.pointerEvents = 'none'; act.style.opacity = '0.5';
     try {
       let media = null;
       if (pendingFile) {
-        media = await uploadMedia(pendingFile, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; }, pendingFileIsAudio);
-        btn.textContent = '💾 GUARDANDO...';
+        showToast('Subiendo... ⏫');
+        media = await uploadMedia(pendingFile, () => {}, pendingFileIsAudio);
       }
       const record = await getRecord();
       const msg = { id: String(Date.now()), sentAt: nowLabel(), text: txt, readStatus: 'sent' };
@@ -854,16 +1004,16 @@
       record.mensajes.push(msg);
       await saveRecord(record);
 
-      input.value = '';
+      input.value = ''; input.style.height = 'auto';
       clearMedia();
+      updateAct('mine');
       showToast('¡Mensaje lanzado como telaraña! 🕷️💌');
       await render();
       setTimeout(openSms, 600);
     } catch (e) {
       showToast('Error al enviar 💔');
     } finally {
-      btn.textContent = btnLabel;
-      btn.disabled = false;
+      act.style.pointerEvents = ''; act.style.opacity = '';
     }
   }
 
@@ -872,18 +1022,17 @@
   // ============================================
   async function sendConstanzaMessage() {
     const input = document.getElementById('cMsgInput');
-    const btn = document.getElementById('cSendBtn');
+    const act = document.getElementById('cAct');
     const txt = input.value.trim();
-    if (!txt && !pendingFileC) { showToast('Escribe algo primero 💭'); return; }
+    if (!txt && !pendingFileC) return;
     if (pendingFileC && (!CLOUD_NAME || !UPLOAD_PRESET)) { showToast('Falta configurar Cloudinary 🔧'); return; }
 
-    const btnLabel = btn.textContent;
-    btn.disabled = true;
+    act.style.pointerEvents = 'none'; act.style.opacity = '0.5';
     try {
       let media = null;
       if (pendingFileC) {
-        media = await uploadMedia(pendingFileC, p => { btn.textContent = `⏫ SUBIENDO ${p}%`; }, pendingFileCIsAudio);
-        btn.textContent = '💾 GUARDANDO...';
+        showToast('Subiendo... ⏫');
+        media = await uploadMedia(pendingFileC, () => {}, pendingFileCIsAudio);
       }
       const record = await getRecord();
       const list = record.mensajesConstanza;
@@ -892,15 +1041,15 @@
       list.push(msg);
       await saveRecord(record);
 
-      input.value = '';
+      input.value = ''; input.style.height = 'auto';
       clearCMedia();
+      updateAct('c');
       showToast('¡Mensaje enviado! 💌💕');
       await render();
     } catch (e) {
       showToast('Error al enviar 💔');
     } finally {
-      btn.textContent = btnLabel;
-      btn.disabled = false;
+      act.style.pointerEvents = ''; act.style.opacity = '';
     }
   }
 
@@ -978,6 +1127,11 @@
         document.getElementById('writePanel').style.display = 'none';
         document.getElementById('cWritePanel').style.display = 'block';
       }
+
+      setupComposer('mine');
+      setupComposer('c');
+      updateAct('mine');
+      updateAct('c');
 
       render();
       setInterval(render, POLL_MS);
