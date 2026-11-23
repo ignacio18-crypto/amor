@@ -193,8 +193,9 @@
     .attach-preview button { background: none; border: none; color: var(--heart-pink); font-size: 1.1rem; cursor: pointer; }
     #composer, #cComposer { display: flex; align-items: flex-end; gap: 0.6rem; position: relative; }
     .field { flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(200,0,0,0.25); border-radius: 26px; display: flex; align-items: flex-end; min-height: 48px; padding: 0 4px; }
+    #composer .field, #cComposer .field { margin-bottom: 0; }
     .write-panel.pink .field { border-color: rgba(255,77,128,0.3); }
-    .field textarea { flex: 1; border: 0; outline: 0; background: none; color: var(--text); font-family: 'Caveat', cursive; font-size: 1.25rem; line-height: 1.3; resize: none; max-height: 110px; padding: 0.7rem 0.3rem; }
+    .field textarea { flex: 1; border: 0; outline: 0; background: none; color: var(--text); font-family: 'Caveat', cursive; font-size: 1.25rem; line-height: 1.3; resize: none; max-height: 110px; padding: 0.7rem 0.3rem; margin-bottom: 0; height: auto; }
     .field textarea::placeholder { color: rgba(255,255,255,0.25); }
     .ib { border: 0; background: none; color: var(--gold); width: 38px; height: 46px; display: grid; place-items: center; font-size: 1.3rem; cursor: pointer; flex: none; }
     #act, #cAct { width: 48px; height: 48px; border-radius: 50%; border: none; background: linear-gradient(135deg, #cc0000, #ff2020); color: #fff; display: grid; place-items: center; flex: none; cursor: pointer; touch-action: none; user-select: none; font-size: 1.3rem; box-shadow: 0 5px 16px rgba(200,0,0,0.4); transition: transform .15s; }
@@ -212,7 +213,7 @@
     #recbar .sl, #cRecbar .sl { margin-left: auto; color: var(--text-dim); font-size: 0.78rem; }
     #lock, #cLock { position: absolute; right: 0; bottom: 56px; width: 38px; height: 66px; border-radius: 18px; background: rgba(12,0,30,0.95); border: 1px solid rgba(200,0,0,0.3); color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; font-size: 0.78rem; }
     audio { display:block; width:100%; margin:0.8rem auto 0; }
-        .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
+    .readonly-msg { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; display: none; }
 
     /* CHAT UNIFICADO ESTILO WHATSAPP */
     .chat-feed { display: flex; flex-direction: column; gap: 0.6rem; max-height: 58vh; overflow-y: auto; padding: 0.6rem 0.3rem 1rem; margin-bottom: 1.2rem; -webkit-overflow-scrolling: touch; }
@@ -277,6 +278,11 @@
     .intro-text { position: relative; z-index: 2; font-family: 'Caveat', cursive; font-size: 1.9rem; color: #fff; text-align: center; margin-top: 0.4rem; text-shadow: 0 0 18px rgba(255,255,255,0.45); opacity: 0; animation: introFade 1.5s ease 1.2s forwards; }
     #introBtn { position: relative; z-index: 2; width: auto; padding: 0.8rem 2.2rem; margin-top: 1rem; opacity: 0; animation: introFade 1.5s ease 2.6s forwards; }
     @keyframes introFade { to { opacity: 1; } }
+
+    /* CORRECCIÓN: la clase .hide no estaba definida; va al final y con !important
+       para ganarle a los display de #menu, #recbar, #lock, .emo, etc. */
+    .hide { display: none !important; }
+    #introScreen.hide { display: none !important; }
   </style>
 </head>
 <body>
@@ -746,6 +752,7 @@
     prevA.style.display = 'none';
     document.getElementById('attachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
     document.getElementById('attachPreview').style.display = 'flex';
+    document.getElementById('attachClear').style.display = 'inline';
     updateAct('mine');
   }
 
@@ -774,6 +781,7 @@
     prevAC.style.display = 'none';
     document.getElementById('cAttachName').textContent = (isV ? '🎬 ' : '🖼️ ') + f.name;
     document.getElementById('cAttachPreview').style.display = 'flex';
+    document.getElementById('cAttachClear').style.display = 'inline';
     updateAct('c');
   }
 
@@ -873,11 +881,13 @@
           pendingFile = file; pendingFileIsAudio = true;
           document.getElementById('attachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
           document.getElementById('attachPreview').style.display = 'flex';
+          document.getElementById('attachClear').style.display = 'inline';
           const prev = document.getElementById('audioPreview'); prev.src = objUrl; prev.style.display = 'block';
         } else {
           pendingFileC = file; pendingFileCIsAudio = true;
           document.getElementById('cAttachName').textContent = `🎤 Nota de voz (${fmtTime(dur)})`;
           document.getElementById('cAttachPreview').style.display = 'flex';
+          document.getElementById('cAttachClear').style.display = 'inline';
           const prevC = document.getElementById('cAudioPreview'); prevC.src = objUrl; prevC.style.display = 'block';
         }
       }
@@ -941,7 +951,6 @@
   const EMOJIS = ['🕷️','🕸️','❤️','💕','😍','🥰','😘','😂','😢','😡','🤔','😎','👍','🙏','🔥','✨','💔','🌹','🎶','😴','🤗','💪','🙈','🎉'];
 
   function setupComposer(side) {
-    const p = side === 'mine' ? '' : 'c';
     const textarea = document.getElementById(side === 'mine' ? 'msgInput' : 'cMsgInput');
     const emoBtn = document.getElementById(side === 'mine' ? 'emoBtn' : 'cEmoBtn');
     const emoPanel = document.getElementById(side === 'mine' ? 'emo' : 'cEmo');
