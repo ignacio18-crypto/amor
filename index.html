@@ -536,10 +536,8 @@
       <button type="button" data-k="cam"><span class="c cam">📷</span>Cámara</button>
       <button type="button" data-k="gal"><span class="c gal">🖼️</span>Galería</button>
     </div>
-    <div id="emo" class="pop emo hide"></div>
     <div id="composer">
       <div class="field" id="field">
-        <button type="button" class="ib" id="emoBtn">😊</button>
         <textarea id="msgInput" rows="1" placeholder="Escribe algo que haga palpitar el corazón..."></textarea>
         <button type="button" class="ib" id="clip">📎</button>
       </div>
@@ -565,10 +563,8 @@
       <button type="button" data-k="cam"><span class="c cam">📷</span>Cámara</button>
       <button type="button" data-k="gal"><span class="c gal">🖼️</span>Galería</button>
     </div>
-    <div id="cEmo" class="pop emo hide"></div>
     <div id="cComposer">
       <div class="field" id="cField">
-        <button type="button" class="ib" id="cEmoBtn">😊</button>
         <textarea id="cMsgInput" rows="1" maxlength="1000" placeholder="Cuéntale lo que sientes..."></textarea>
         <button type="button" class="ib" id="cClip">📎</button>
       </div>
@@ -948,26 +944,14 @@
   // ============================================
   // EMOJIS Y MENÚ DE ADJUNTAR
   // ============================================
-  const EMOJIS = ['🕷️','🕸️','❤️','💕','😍','🥰','😘','😂','😢','😡','🤔','😎','👍','🙏','🔥','✨','💔','🌹','🎶','😴','🤗','💪','🙈','🎉'];
-
   function setupComposer(side) {
     const textarea = document.getElementById(side === 'mine' ? 'msgInput' : 'cMsgInput');
-    const emoBtn = document.getElementById(side === 'mine' ? 'emoBtn' : 'cEmoBtn');
-    const emoPanel = document.getElementById(side === 'mine' ? 'emo' : 'cEmo');
     const clipBtn = document.getElementById(side === 'mine' ? 'clip' : 'cClip');
     const menuPanel = document.getElementById(side === 'mine' ? 'menu' : 'cMenu');
     const mediaInput = document.getElementById(side === 'mine' ? 'mediaInput' : 'cMediaInput');
     const camInput = document.getElementById(side === 'mine' ? 'camInput' : 'cCamInput');
 
-    EMOJIS.forEach(em => {
-      const s = document.createElement('span');
-      s.textContent = em;
-      s.onclick = () => { textarea.value += em; textarea.dispatchEvent(new Event('input')); };
-      emoPanel.appendChild(s);
-    });
-
-    function closePop() { menuPanel.classList.add('hide'); emoPanel.classList.add('hide'); }
-    emoBtn.onclick = () => { const o = emoPanel.classList.contains('hide'); closePop(); if (o) emoPanel.classList.remove('hide'); };
+    function closePop() { menuPanel.classList.add('hide'); }
     clipBtn.onclick = () => { const o = menuPanel.classList.contains('hide'); closePop(); if (o) menuPanel.classList.remove('hide'); };
     menuPanel.onclick = e => {
       const b = e.target.closest('button'); if (!b) return;
